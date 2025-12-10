@@ -188,6 +188,40 @@
       font-weight: 600;
     }
 
+        /* 月份 tab 样式 */
+    .month-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .month-tab {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f5f5fb;
+      padding: 4px 10px;
+      cursor: pointer;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .month-tab.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .month-panel {
+      display: none;
+    }
+
+    .month-panel.active {
+      display: block;
+    }
+
+
   </style>
 </head>
 <body>
@@ -197,14 +231,33 @@
       <p>记录每一次攀岩的日期、内容和达成情况，方便长期对比和回顾。</p>
     </header>
 
-    <!-- 自动生成的 2025 攀岩日历 -->
-    <section class="card">
-      <h2 class="card-title">
-        <span class="icon">📅</span>
-        攀岩日历（2025）
-      </h2>
-      <div id="calendar-2025"></div>
-    </section>
+    <!-- 自动生成的 2025 攀岩日历（带月份 tab） -->
+<section class="card">
+  <h2 class="card-title">
+    <span class="icon">📅</span>
+    攀岩日历（2025）
+  </h2>
+
+  <!-- 月份 tab -->
+  <div class="month-tabs" id="month-tabs-2025">
+    <button class="month-tab active" data-month="0">1 月</button>
+    <button class="month-tab" data-month="1">2 月</button>
+    <button class="month-tab" data-month="2">3 月</button>
+    <button class="month-tab" data-month="3">4 月</button>
+    <button class="month-tab" data-month="4">5 月</button>
+    <button class="month-tab" data-month="5">6 月</button>
+    <button class="month-tab" data-month="6">7 月</button>
+    <button class="month-tab" data-month="7">8 月</button>
+    <button class="month-tab" data-month="8">9 月</button>
+    <button class="month-tab" data-month="9">10 月</button>
+    <button class="month-tab" data-month="10">11 月</button>
+    <button class="month-tab" data-month="11">12 月</button>
+  </div>
+
+  <!-- 这里会由 JS 动态生成每个月的日历 -->
+  <div id="calendar-2025"></div>
+</section>
+
 
     <!-- 原来的攀岩训练明细表格 -->
     <section class="card">
@@ -277,6 +330,7 @@
   </div>
 
   <!-- 自动生成 2025 全年日历的脚本 -->
+    <!-- 自动生成 2025 全年日历 + 月份 tab 的脚本 -->
   <script>
     // 你攀岩过的日期列表（按需维护）
     const climbDays = [
@@ -293,8 +347,9 @@
       const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
 
       for (let month = 0; month < 12; month++) {
-        const monthBlock = document.createElement("div");
-        monthBlock.className = "calendar-block";
+        const monthPanel = document.createElement("div");
+        monthPanel.className = "month-panel";
+        monthPanel.dataset.month = String(month);
 
         const header = document.createElement("div");
         header.className = "calendar-header";
@@ -308,7 +363,7 @@
 
         header.appendChild(title);
         header.appendChild(desc);
-        monthBlock.appendChild(header);
+        monthPanel.appendChild(header);
 
         const grid = document.createElement("div");
         grid.className = "calendar-grid";
@@ -324,7 +379,7 @@
         // 这个月第一天
         const firstDay = new Date(year, month, 1);
         const jsWeekday = firstDay.getDay(); // 0(周日)-6(周六)
-        // 转换为 以周一为第一列 的 index：0(周一)-6(周日)
+        // 转换为以周一为第一列：0(周一)-6(周日)
         const offset = (jsWeekday + 6) % 7;
 
         // 前面空白
@@ -359,15 +414,52 @@
           grid.appendChild(dEl);
         }
 
-        monthBlock.appendChild(grid);
-        container.appendChild(monthBlock);
+        monthPanel.appendChild(grid);
+        container.appendChild(monthPanel);
       }
     }
 
-    // 生成 2025 全年日历
+    function initMonthTabs(year) {
+      const tabsContainer = document.getElementById("month-tabs-" + year);
+      const calendarContainer = document.getElementById("calendar-" + year);
+      if (!tabsContainer || !calendarContainer) return;
+
+      const tabs = tabsContainer.querySelectorAll(".month-tab");
+      const panels = calendarContainer.querySelectorAll(".month-panel");
+
+      function setActiveMonth(monthIndex) {
+        tabs.forEach((tab) => {
+          tab.classList.toggle(
+            "active",
+            Number(tab.dataset.month) === monthIndex
+          );
+        });
+        panels.forEach((panel) => {
+          panel.classList.toggle(
+            "active",
+            Number(panel.dataset.month) === monthIndex
+          );
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const monthIndex = Number(tab.dataset.month);
+          setActiveMonth(monthIndex);
+        });
+      });
+
+      // 默认显示 11 月（你目前有攀岩记录的第一个月），也可以改成 0 显示 1 月
+      setActiveMonth(10);
+    }
+
+    // 生成 2025 全年日历 & 初始化 tab
     generateCalendar(2025, "calendar-2025");
+    initMonthTabs(2025);
   </script>
+
 </body>
 </html>
+
 
 
