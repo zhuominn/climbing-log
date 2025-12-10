@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zhuomin 攀岩记录</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card-bg: #ffffff;
+      --border: #e0e0ea;
+      --text-main: #222222;
+      --text-sub: #666666;
+      --accent: #4f46e5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0 0 4px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 16px 16px 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title span.icon {
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background: #f2f2f8;
+    }
+
+    th,
+    td {
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(79, 70, 229, 0.03);
+    }
+
+    .note {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 20px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 6px 4px;
+      }
+
+      .page {
+        padding-inline: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Zhuomin 攀岩记录</h1>
+      <p>记录每一次攀岩的日期、内容和达成情况，方便长期对比和回顾。</p>
+    </header>
+
+    <section class="card">
+      <h2 class="card-title">
+        <span class="icon">🧗‍♀️</span>
+        攀岩训练明细（持续更新）
+      </h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40px;">序号</th>
+            <th style="width: 90px;">日期</th>
+            <th style="width: 80px;">时长</th>
+            <th>主要内容</th>
+            <th style="width: 150px;">达成情况</th>
+            <th style="width: 130px;">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 1 -->
+          <tr>
+            <td>1</td>
+            <td>11 月 22 日</td>
+            <td>—</td>
+            <td>体验课：横移练习 + 两条顶绳体验线路</td>
+            <td>—</td>
+            <td>第一次攀岩</td>
+          </tr>
+
+          <!-- 2 -->
+          <tr>
+            <td>2</td>
+            <td>11 月 26 日 下午</td>
+            <td>—</td>
+            <td>顶绳体验线路</td>
+            <td><span class="tag">首次登顶 · 共 3 次</span></td>
+            <td>有明显进步</td>
+          </tr>
+
+          <!-- 3 -->
+          <tr>
+            <td>3</td>
+            <td>11 月 30 日 上午</td>
+            <td>—</td>
+            <td>顶绳体验线路</td>
+            <td><span class="tag">登顶 7 次</span></td>
+            <td>体能与熟练度提升</td>
+          </tr>
+
+          <!-- 4 -->
+          <tr>
+            <td>4</td>
+            <td>12 月 3 日</td>
+            <td>约 4 小时</td>
+            <td>尝试难度 5.9 路线</td>
+            <td>爬至中段，未登顶</td>
+            <td>首次尝试正式难度线路</td>
+          </tr>
+
+          <!-- 之后每次攀岩，在这里追加新的 <tr> -->
+        </tbody>
+      </table>
+
+      <p class="note">
+        使用说明：每次攀岩结束后，在 <code>&lt;tbody&gt;</code> 末尾新增一行 <code>&lt;tr&gt;...&lt;/tr&gt;</code>，
+        序号按顺序 +1，同时填入新的日期、时长、内容和达成情况即可。
+      </p>
+    </section>
+  </div>
+</body>
+</html>
