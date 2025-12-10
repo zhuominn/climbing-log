@@ -131,6 +131,61 @@
         padding-inline: 12px;
       }
     }
+        /* 攀岩日历样式 */
+    .calendar-block {
+      margin-bottom: 16px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .calendar-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-sub);
+      padding: 2px 0;
+    }
+
+    .day {
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: var(--text-main);
+    }
+
+    .day-empty {
+      background: transparent;
+    }
+
+    .day-number {
+      padding: 2px 4px;
+    }
+
+    .day.climb-day {
+      border: 1px solid var(--accent);
+      background: rgba(79, 70, 229, 0.04);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -139,6 +194,147 @@
       <h1>Zhuomin 攀岩记录</h1>
       <p>记录每一次攀岩的日期、内容和达成情况，方便长期对比和回顾。</p>
     </header>
+
+    <!-- 攀岩日历模块开始 -->
+<section class="card">
+  <h2 class="card-title">
+    <span class="icon">📅</span>
+    攀岩日历（2025）
+  </h2>
+
+  <!-- 2025 年 11 月 -->
+  <div class="calendar-block">
+    <div class="calendar-header">
+      <div class="calendar-title">2025 年 11 月</div>
+      <div>圈出的日期表示攀岩日</div>
+    </div>
+
+    <div class="calendar-grid">
+      <!-- 星期 -->
+      <div class="calendar-weekday">一</div>
+      <div class="calendar-weekday">二</div>
+      <div class="calendar-weekday">三</div>
+      <div class="calendar-weekday">四</div>
+      <div class="calendar-weekday">五</div>
+      <div class="calendar-weekday">六</div>
+      <div class="calendar-weekday">日</div>
+
+      <!-- 2025-11-01 是星期六 -->
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day"><span class="day-number">1</span></div>
+      <div class="day"><span class="day-number">2</span></div>
+
+      <div class="day"><span class="day-number">3</span></div>
+      <div class="day"><span class="day-number">4</span></div>
+      <div class="day"><span class="day-number">5</span></div>
+      <div class="day"><span class="day-number">6</span></div>
+      <div class="day"><span class="day-number">7</span></div>
+      <div class="day"><span class="day-number">8</span></div>
+      <div class="day"><span class="day-number">9</span></div>
+
+      <div class="day"><span class="day-number">10</span></div>
+      <div class="day"><span class="day-number">11</span></div>
+      <div class="day"><span class="day-number">12</span></div>
+      <div class="day"><span class="day-number">13</span></div>
+      <div class="day"><span class="day-number">14</span></div>
+      <div class="day"><span class="day-number">15</span></div>
+      <div class="day"><span class="day-number">16</span></div>
+
+      <div class="day"><span class="day-number">17</span></div>
+      <div class="day"><span class="day-number">18</span></div>
+      <div class="day"><span class="day-number">19</span></div>
+      <div class="day"><span class="day-number">20</span></div>
+      <div class="day"><span class="day-number">21</span></div>
+
+      <!-- 攀岩：22 -->
+      <div class="day climb-day"><span class="day-number">22</span></div>
+
+      <div class="day"><span class="day-number">23</span></div>
+
+      <div class="day"><span class="day-number">24</span></div>
+      <div class="day"><span class="day-number">25</span></div>
+      <div class="day"><span class="day-number">26</span></div>
+
+      <!-- 攀岩：26（你 26 号去了） -->
+      <div class="day climb-day"><span class="day-number">26</span></div>
+
+      <div class="day"><span class="day-number">27</span></div>
+      <div class="day"><span class="day-number">28</span></div>
+      <div class="day"><span class="day-number">29</span></div>
+
+      <!-- 攀岩：30 -->
+      <div class="day climb-day"><span class="day-number">30</span></div>
+    </div>
+  </div>
+
+  <!-- 2025 年 12 月 -->
+  <div class="calendar-block">
+    <div class="calendar-header">
+      <div class="calendar-title">2025 年 12 月</div>
+      <div>圈出的日期表示攀岩日</div>
+    </div>
+
+    <div class="calendar-grid">
+      <!-- 星期 -->
+      <div class="calendar-weekday">一</div>
+      <div class="calendar-weekday">二</div>
+      <div class="calendar-weekday">三</div>
+      <div class="calendar-weekday">四</div>
+      <div class="calendar-weekday">五</div>
+      <div class="calendar-weekday">六</div>
+      <div class="calendar-weekday">日</div>
+
+      <!-- 2025-12-01 是星期一 -->
+      <div class="day"><span class="day-number">1</span></div>
+      <div class="day"><span class="day-number">2</span></div>
+
+      <!-- 攀岩：12 月 3 日 -->
+      <div class="day climb-day"><span class="day-number">3</span></div>
+
+      <div class="day"><span class="day-number">4</span></div>
+      <div class="day"><span class="day-number">5</span></div>
+      <div class="day"><span class="day-number">6</span></div>
+      <div class="day"><span class="day-number">7</span></div>
+
+      <div class="day"><span class="day-number">8</span></div>
+      <div class="day"><span class="day-number">9</span></div>
+      <div class="day"><span class="day-number">10</span></div>
+      <div class="day"><span class="day-number">11</span></div>
+      <div class="day"><span class="day-number">12</span></div>
+      <div class="day"><span class="day-number">13</span></div>
+      <div class="day"><span class="day-number">14</span></div>
+
+      <div class="day"><span class="day-number">15</span></div>
+      <div class="day"><span class="day-number">16</span></div>
+      <div class="day"><span class="day-number">17</span></div>
+      <div class="day"><span class="day-number">18</span></div>
+      <div class="day"><span class="day-number">19</span></div>
+      <div class="day"><span class="day-number">20</span></div>
+      <div class="day"><span class="day-number">21</span></div>
+
+      <div class="day"><span class="day-number">22</span></div>
+      <div class="day"><span class="day-number">23</span></div>
+      <div class="day"><span class="day-number">24</span></div>
+      <div class="day"><span class="day-number">25</span></div>
+      <div class="day"><span class="day-number">26</span></div>
+      <div class="day"><span class="day-number">27</span></div>
+      <div class="day"><span class="day-number">28</span></div>
+
+      <div class="day"><span class="day-number">29</span></div>
+      <div class="day"><span class="day-number">30</span></div>
+      <div class="day"><span class="day-number">31</span></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+      <div class="day day-empty"></div>
+    </div>
+  </div>
+</section>
+<!-- 攀岩日历模块结束 -->
 
     <section class="card">
       <h2 class="card-title">
@@ -210,3 +406,4 @@
   </div>
 </body>
 </html>
+
