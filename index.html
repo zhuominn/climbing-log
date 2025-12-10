@@ -131,7 +131,7 @@
         padding-inline: 12px;
       }
     }
-        /* 攀岩日历样式 */
+            /* 攀岩日历样式 */
     .calendar-block {
       margin-bottom: 16px;
     }
@@ -155,6 +155,7 @@
       grid-template-columns: repeat(7, 1fr);
       gap: 4px;
       font-size: 11px;
+      margin-bottom: 12px;
     }
 
     .calendar-weekday {
@@ -183,9 +184,10 @@
 
     .day.climb-day {
       border: 1px solid var(--accent);
-      background: rgba(79, 70, 229, 0.04);
+      background: rgba(79, 70, 229, 0.06);
       font-weight: 600;
     }
+
   </style>
 </head>
 <body>
@@ -195,147 +197,16 @@
       <p>记录每一次攀岩的日期、内容和达成情况，方便长期对比和回顾。</p>
     </header>
 
-    <!-- 攀岩日历模块开始 -->
-<section class="card">
-  <h2 class="card-title">
-    <span class="icon">📅</span>
-    攀岩日历（2025）
-  </h2>
+    <!-- 自动生成的 2025 攀岩日历 -->
+    <section class="card">
+      <h2 class="card-title">
+        <span class="icon">📅</span>
+        攀岩日历（2025）
+      </h2>
+      <div id="calendar-2025"></div>
+    </section>
 
-  <!-- 2025 年 11 月 -->
-  <div class="calendar-block">
-    <div class="calendar-header">
-      <div class="calendar-title">2025 年 11 月</div>
-      <div>圈出的日期表示攀岩日</div>
-    </div>
-
-    <div class="calendar-grid">
-      <!-- 星期 -->
-      <div class="calendar-weekday">一</div>
-      <div class="calendar-weekday">二</div>
-      <div class="calendar-weekday">三</div>
-      <div class="calendar-weekday">四</div>
-      <div class="calendar-weekday">五</div>
-      <div class="calendar-weekday">六</div>
-      <div class="calendar-weekday">日</div>
-
-      <!-- 2025-11-01 是星期六 -->
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day"><span class="day-number">1</span></div>
-      <div class="day"><span class="day-number">2</span></div>
-
-      <div class="day"><span class="day-number">3</span></div>
-      <div class="day"><span class="day-number">4</span></div>
-      <div class="day"><span class="day-number">5</span></div>
-      <div class="day"><span class="day-number">6</span></div>
-      <div class="day"><span class="day-number">7</span></div>
-      <div class="day"><span class="day-number">8</span></div>
-      <div class="day"><span class="day-number">9</span></div>
-
-      <div class="day"><span class="day-number">10</span></div>
-      <div class="day"><span class="day-number">11</span></div>
-      <div class="day"><span class="day-number">12</span></div>
-      <div class="day"><span class="day-number">13</span></div>
-      <div class="day"><span class="day-number">14</span></div>
-      <div class="day"><span class="day-number">15</span></div>
-      <div class="day"><span class="day-number">16</span></div>
-
-      <div class="day"><span class="day-number">17</span></div>
-      <div class="day"><span class="day-number">18</span></div>
-      <div class="day"><span class="day-number">19</span></div>
-      <div class="day"><span class="day-number">20</span></div>
-      <div class="day"><span class="day-number">21</span></div>
-
-      <!-- 攀岩：22 -->
-      <div class="day climb-day"><span class="day-number">22</span></div>
-
-      <div class="day"><span class="day-number">23</span></div>
-
-      <div class="day"><span class="day-number">24</span></div>
-      <div class="day"><span class="day-number">25</span></div>
-      <div class="day"><span class="day-number">26</span></div>
-
-      <!-- 攀岩：26（你 26 号去了） -->
-      <div class="day climb-day"><span class="day-number">26</span></div>
-
-      <div class="day"><span class="day-number">27</span></div>
-      <div class="day"><span class="day-number">28</span></div>
-      <div class="day"><span class="day-number">29</span></div>
-
-      <!-- 攀岩：30 -->
-      <div class="day climb-day"><span class="day-number">30</span></div>
-    </div>
-  </div>
-
-  <!-- 2025 年 12 月 -->
-  <div class="calendar-block">
-    <div class="calendar-header">
-      <div class="calendar-title">2025 年 12 月</div>
-      <div>圈出的日期表示攀岩日</div>
-    </div>
-
-    <div class="calendar-grid">
-      <!-- 星期 -->
-      <div class="calendar-weekday">一</div>
-      <div class="calendar-weekday">二</div>
-      <div class="calendar-weekday">三</div>
-      <div class="calendar-weekday">四</div>
-      <div class="calendar-weekday">五</div>
-      <div class="calendar-weekday">六</div>
-      <div class="calendar-weekday">日</div>
-
-      <!-- 2025-12-01 是星期一 -->
-      <div class="day"><span class="day-number">1</span></div>
-      <div class="day"><span class="day-number">2</span></div>
-
-      <!-- 攀岩：12 月 3 日 -->
-      <div class="day climb-day"><span class="day-number">3</span></div>
-
-      <div class="day"><span class="day-number">4</span></div>
-      <div class="day"><span class="day-number">5</span></div>
-      <div class="day"><span class="day-number">6</span></div>
-      <div class="day"><span class="day-number">7</span></div>
-
-      <div class="day"><span class="day-number">8</span></div>
-      <div class="day"><span class="day-number">9</span></div>
-      <div class="day"><span class="day-number">10</span></div>
-      <div class="day"><span class="day-number">11</span></div>
-      <div class="day"><span class="day-number">12</span></div>
-      <div class="day"><span class="day-number">13</span></div>
-      <div class="day"><span class="day-number">14</span></div>
-
-      <div class="day"><span class="day-number">15</span></div>
-      <div class="day"><span class="day-number">16</span></div>
-      <div class="day"><span class="day-number">17</span></div>
-      <div class="day"><span class="day-number">18</span></div>
-      <div class="day"><span class="day-number">19</span></div>
-      <div class="day"><span class="day-number">20</span></div>
-      <div class="day"><span class="day-number">21</span></div>
-
-      <div class="day"><span class="day-number">22</span></div>
-      <div class="day"><span class="day-number">23</span></div>
-      <div class="day"><span class="day-number">24</span></div>
-      <div class="day"><span class="day-number">25</span></div>
-      <div class="day"><span class="day-number">26</span></div>
-      <div class="day"><span class="day-number">27</span></div>
-      <div class="day"><span class="day-number">28</span></div>
-
-      <div class="day"><span class="day-number">29</span></div>
-      <div class="day"><span class="day-number">30</span></div>
-      <div class="day"><span class="day-number">31</span></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-      <div class="day day-empty"></div>
-    </div>
-  </div>
-</section>
-<!-- 攀岩日历模块结束 -->
-
+    <!-- 原来的攀岩训练明细表格 -->
     <section class="card">
       <h2 class="card-title">
         <span class="icon">🧗‍♀️</span>
@@ -357,7 +228,7 @@
           <!-- 1 -->
           <tr>
             <td>1</td>
-            <td>11 月 22 日</td>
+            <td>2025-11-22</td>
             <td>—</td>
             <td>体验课：横移练习 + 两条顶绳体验线路</td>
             <td>—</td>
@@ -367,7 +238,7 @@
           <!-- 2 -->
           <tr>
             <td>2</td>
-            <td>11 月 26 日 下午</td>
+            <td>2025-11-26 下午</td>
             <td>—</td>
             <td>顶绳体验线路</td>
             <td><span class="tag">首次登顶 · 共 3 次</span></td>
@@ -377,7 +248,7 @@
           <!-- 3 -->
           <tr>
             <td>3</td>
-            <td>11 月 30 日 上午</td>
+            <td>2025-11-30 上午</td>
             <td>—</td>
             <td>顶绳体验线路</td>
             <td><span class="tag">登顶 7 次</span></td>
@@ -387,7 +258,7 @@
           <!-- 4 -->
           <tr>
             <td>4</td>
-            <td>12 月 3 日</td>
+            <td>2025-12-03</td>
             <td>约 4 小时</td>
             <td>尝试难度 5.9 路线</td>
             <td>爬至中段，未登顶</td>
@@ -399,11 +270,104 @@
       </table>
 
       <p class="note">
-        使用说明：每次攀岩结束后，在 <code>&lt;tbody&gt;</code> 末尾新增一行 <code>&lt;tr&gt;...&lt;/tr&gt;</code>，
-        序号按顺序 +1，同时填入新的日期、时长、内容和达成情况即可。
+        使用说明：每次攀岩结束后，在 <code>&lt;tbody&gt;</code> 末尾新增一行记录；如需在日历中标记，
+        只需在下面的 <code>climbDays</code> 数组中追加对应日期。
       </p>
     </section>
   </div>
+
+  <!-- 自动生成 2025 全年日历的脚本 -->
+  <script>
+    // 你攀岩过的日期列表（按需维护）
+    const climbDays = [
+      "2025-11-22",
+      "2025-11-26",
+      "2025-11-30",
+      "2025-12-03"
+    ];
+
+    function generateCalendar(year, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
+
+      for (let month = 0; month < 12; month++) {
+        const monthBlock = document.createElement("div");
+        monthBlock.className = "calendar-block";
+
+        const header = document.createElement("div");
+        header.className = "calendar-header";
+
+        const title = document.createElement("div");
+        title.className = "calendar-title";
+        title.textContent = year + " 年 " + (month + 1) + " 月";
+
+        const desc = document.createElement("div");
+        desc.textContent = "圈出的日期表示攀岩日";
+
+        header.appendChild(title);
+        header.appendChild(desc);
+        monthBlock.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "calendar-grid";
+
+        // 星期标题
+        weekdays.forEach((w) => {
+          const wEl = document.createElement("div");
+          wEl.className = "calendar-weekday";
+          wEl.textContent = w;
+          grid.appendChild(wEl);
+        });
+
+        // 这个月第一天
+        const firstDay = new Date(year, month, 1);
+        const jsWeekday = firstDay.getDay(); // 0(周日)-6(周六)
+        // 转换为 以周一为第一列 的 index：0(周一)-6(周日)
+        const offset = (jsWeekday + 6) % 7;
+
+        // 前面空白
+        for (let i = 0; i < offset; i++) {
+          const empty = document.createElement("div");
+          empty.className = "day day-empty";
+          grid.appendChild(empty);
+        }
+
+        // 这个月总天数
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dEl = document.createElement("div");
+          dEl.className = "day";
+
+          const dateStr =
+            year +
+            "-" +
+            String(month + 1).padStart(2, "0") +
+            "-" +
+            String(day).padStart(2, "0");
+
+          if (climbDays.includes(dateStr)) {
+            dEl.classList.add("climb-day");
+          }
+
+          const span = document.createElement("span");
+          span.className = "day-number";
+          span.textContent = day;
+          dEl.appendChild(span);
+          grid.appendChild(dEl);
+        }
+
+        monthBlock.appendChild(grid);
+        container.appendChild(monthBlock);
+      }
+    }
+
+    // 生成 2025 全年日历
+    generateCalendar(2025, "calendar-2025");
+  </script>
 </body>
 </html>
+
 
