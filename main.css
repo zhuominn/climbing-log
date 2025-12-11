@@ -5,6 +5,7 @@
       --text-main: #222222;
       --text-sub: #666666;
       --accent: #4f46e5;
+      --highlight: #f1efff;
     }
 
     * {
@@ -59,6 +60,11 @@
 
     .card-title span.icon {
       font-size: 18px;
+    }
+
+    .highlight-row {
+      background: var(--highlight) !important;
+      transition: background 0.3s;
     }
 
     table {

@@ -88,19 +88,22 @@
                         behavior: "smooth",
                         block: "center"
                     });
-                    // 高亮效果（例如 1 秒）
-                    row.style.background = "#0e0ea";
-                    setTimeout(() => {
-                        row.style.background = "";
-                    }, 1200);
-                    }
+                    
+                    // ⭐ 让所有行先移除高亮（避免多个高亮）
+                    document
+                        .querySelectorAll("tr")
+                        .forEach((el) => el.classList.remove("highlight-row"));
+                        
+                    // ⭐ 给目标行添加高亮样式
+                    row.classList.add("highlight-row");
                 }
-            });
+            }
+        });
 
-        }
+    }
 
-        monthPanel.appendChild(grid);
-        container.appendChild(monthPanel);
+    monthPanel.appendChild(grid);
+    container.appendChild(monthPanel);
       }
     }
 
