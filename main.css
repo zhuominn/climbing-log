@@ -86,6 +86,10 @@
         color: var(--accent);
     }
 
+    .edited-row:not(.highlight-row) {
+        outline: 1px dashed #f2a654;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
