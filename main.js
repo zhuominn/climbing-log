@@ -89,7 +89,7 @@
                         block: "center"
                     });
                     // 高亮效果（例如 1 秒）
-                    row.style.background = "#ffffcc";
+                    row.style.background = "#0e0ea";
                     setTimeout(() => {
                         row.style.background = "";
                     }, 1200);
