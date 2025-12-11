@@ -79,6 +79,24 @@
           span.textContent = day;
           dEl.appendChild(span);
           grid.appendChild(dEl);
+
+            dEl.addEventListener("click", () => {
+                if (climbDays.includes(dateStr)) {
+                    const row = document.getElementById("row-" + dateStr);
+                    if (row) {
+                    row.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                    // 高亮效果（例如 1 秒）
+                    row.style.background = "#ffffcc";
+                    setTimeout(() => {
+                        row.style.background = "";
+                    }, 1200);
+                    }
+                }
+            });
+
         }
 
         monthPanel.appendChild(grid);
