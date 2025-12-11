@@ -1,0 +1,215 @@
+:root {
+      --bg: #f7f7fb;
+      --card-bg: #ffffff;
+      --border: #e0e0ea;
+      --text-main: #222222;
+      --text-sub: #666666;
+      --accent: #4f46e5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0 0 4px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 16px 16px 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title span.icon {
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background: #f2f2f8;
+    }
+
+    th,
+    td {
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(79, 70, 229, 0.03);
+    }
+
+    .note {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 20px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 6px 4px;
+      }
+
+      .page {
+        padding-inline: 12px;
+      }
+    }
+            /* 攀岩日历样式 */
+    .calendar-block {
+      margin-bottom: 16px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .calendar-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      font-size: 11px;
+      margin-bottom: 12px;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-sub);
+      padding: 2px 0;
+    }
+
+    .day {
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: var(--text-main);
+    }
+
+    .day-empty {
+      background: transparent;
+    }
+
+    .day-number {
+      padding: 2px 4px;
+    }
+
+    .day.climb-day {
+      border: 1px solid var(--accent);
+      background: rgba(79, 70, 229, 0.06);
+      font-weight: 600;
+    }
+
+        /* 月份 tab 样式 */
+    .month-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .month-tab {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f5f5fb;
+      padding: 4px 10px;
+      cursor: pointer;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .month-tab.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .month-panel {
+      display: none;
+    }
+
+    .month-panel.active {
+      display: block;
+    }
