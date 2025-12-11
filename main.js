@@ -1,12 +1,15 @@
-// 你攀岩过的日期列表（按需维护）
-    const climbDays = [
-      "2025-11-22",
-      "2025-11-26",
-      "2025-11-30",
-      "2025-12-03",
-      "2025-12-10",
-    ];
+// ===== Supabase 初始化 =====
+const supabaseUrl = "https://xcfendynbsrmpgalpefk.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZmVuZHluYnNybXBnYWxwZWZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0Mjg5NTQsImV4cCI6MjA4MTAwNDk1NH0.Jec4x0rNk5InJUCMwkbPoCYHdWEia1tv3Y1xJCboEpo";
+const { createClient } = supabase;
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
+// 攀岩日：先留空，等从数据库加载后填充
+let climbDays = [];
+
+
+
+// 你攀岩过的日期列表（按需维护）
     function generateCalendar(year, containerId) {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -93,7 +96,7 @@
                     document
                         .querySelectorAll("tr")
                         .forEach((el) => el.classList.remove("highlight-row"));
-                        
+
                     // ⭐ 给目标行添加高亮样式
                     row.classList.add("highlight-row");
                 }
@@ -142,5 +145,87 @@
     }
 
     // 生成 2025 全年日历 & 初始化 tab
-    generateCalendar(2025, "calendar-2025");
-    initMonthTabs(2025);
+    //generateCalendar(2025, "calendar-2025");
+    //initMonthTabs(2025);
+
+
+    // ===== 从 Supabase 加载攀岩记录并渲染表格 =====
+    async function loadLogsFromSupabase() {
+    const tbody = document.getElementById("log-tbody");
+    if (!tbody) return;
+
+    // 1. 查询数据（按日期排序）
+    const { data, error } = await supabaseClient
+        .from("climbing_logs")
+        .select("*")
+        .order("date", { ascending: true });
+
+    if (error) {
+        console.error("加载攀岩记录失败：", error);
+        return;
+    }
+
+    // 2. 清空原来的表格内容
+    tbody.innerHTML = "";
+    climbDays = [];
+
+    // 3. 生成每一行
+    data.forEach((row, index) => {
+        const tr = document.createElement("tr");
+        const dateStr = row.date; // Supabase 的 date 字段会是 "2025-11-22"
+
+        // 用于日历点击跳转
+        tr.id = "row-" + dateStr;
+
+        // 序号
+        const tdSeq = document.createElement("td");
+        tdSeq.textContent = index + 1;
+        tr.appendChild(tdSeq);
+
+        // 日期
+        const tdDate = document.createElement("td");
+        tdDate.textContent = dateStr;
+        tr.appendChild(tdDate);
+
+        // 时长
+        const tdDuration = document.createElement("td");
+        tdDuration.textContent = row.duration || "—";
+        tr.appendChild(tdDuration);
+
+        // 主要内容
+        const tdContent = document.createElement("td");
+        tdContent.textContent = row.content || "";
+        tr.appendChild(tdContent);
+
+        // 达成情况
+        const tdResult = document.createElement("td");
+        tdResult.textContent = row.result || "";
+        tr.appendChild(tdResult);
+
+        // 备注
+        const tdNote = document.createElement("td");
+        tdNote.textContent = row.note || "";
+        tr.appendChild(tdNote);
+
+        tbody.appendChild(tr);
+
+        // 用于日历打圈
+        if (dateStr) {
+        climbDays.push(dateStr);
+        }
+    });
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+  // 1. 先加载攀岩记录（填表 + 填 climbDays）
+  await loadLogsFromSupabase();
+
+  // 2. 再用 climbDays 生成 2025 日历
+  generateCalendar(2025, "calendar-2025");
+  initMonthTabs(2025);
+
+  // 如果你已有 initAddRow（目前只是前端新增），可以暂时关掉或留着：
+  // initAddRow();
+});
+
+
