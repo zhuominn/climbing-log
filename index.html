@@ -48,7 +48,13 @@
         攀岩训练明细（持续更新）
       </h2>
 
-      <table>
+      <!-- 按钮区域 -->
+      <div style="margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button id="add-row-btn" class="btn-secondary">+ 新增一行记录</button>
+        <button id="save-new-rows-btn" class="btn-secondary">💾 保存新记录到云端</button>
+      </div>
+
+      <table class="log-table">
         <thead>
           <tr>
             <th style="width: 40px;">序号</th>
@@ -63,10 +69,6 @@
         </tbody>
       </table>
 
-      <p class="note">
-        使用说明：每次攀岩结束后，在 <code>&lt;tbody&gt;</code> 末尾新增一行记录；如需在日历中标记，
-        只需在下面的 <code>climbDays</code> 数组中追加对应日期。
-      </p>
     </section>
   </div>
 

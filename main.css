@@ -67,9 +67,28 @@
       transition: background 0.3s;
     }
 
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        margin-bottom: 4px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: #f5f5fb;
+        font-size: 12px;
+        color: var(--text-sub);
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
     table {
-      width: 100%;
-      border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
       font-size: 13px;
     }
 

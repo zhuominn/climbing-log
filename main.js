@@ -216,16 +216,150 @@ let climbDays = [];
     });
     }
 
-    window.addEventListener("DOMContentLoaded", async () => {
-  // 1. 先加载攀岩记录（填表 + 填 climbDays）
-  await loadLogsFromSupabase();
 
-  // 2. 再用 climbDays 生成 2025 日历
-  generateCalendar(2025, "calendar-2025");
-  initMonthTabs(2025);
 
-  // 如果你已有 initAddRow（目前只是前端新增），可以暂时关掉或留着：
-  // initAddRow();
+    // ===== 攀岩训练表格：新增行 + 保存到 Supabase =====
+    function initAddRow() {
+    const addRowBtn = document.getElementById("add-row-btn");
+    const saveNewRowsBtn = document.getElementById("save-new-rows-btn");
+    const tbody = document.getElementById("log-tbody");
+    if (!addRowBtn || !saveNewRowsBtn || !tbody) return;
+
+    // 计算下一个序号（读当前行数）
+    function getNextSeq() {
+        const rows = tbody.querySelectorAll("tr");
+        return rows.length + 1;
+    }
+
+    // 点击「新增一行记录」
+    addRowBtn.addEventListener("click", () => {
+        const seq = getNextSeq();
+        const tr = document.createElement("tr");
+        tr.dataset.new = "true"; // 标记为新行，尚未保存到 Supabase
+
+        // 序号（不可编辑）
+        const tdSeq = document.createElement("td");
+        tdSeq.textContent = seq;
+        tr.appendChild(tdSeq);
+
+        // 日期（可编辑）
+        const tdDate = document.createElement("td");
+        tdDate.contentEditable = "true";
+        tdDate.dataset.dateCell = "true";
+        tdDate.textContent = "2025-12-10"; // 你可以改成今天的日期作为默认值
+        tr.appendChild(tdDate);
+
+        // 时长
+        const tdDuration = document.createElement("td");
+        tdDuration.contentEditable = "true";
+        tdDuration.textContent = "—";
+        tr.appendChild(tdDuration);
+
+        // 主要内容
+        const tdContent = document.createElement("td");
+        tdContent.contentEditable = "true";
+        tdContent.textContent = "";
+        tr.appendChild(tdContent);
+
+        // 达成情况
+        const tdResult = document.createElement("td");
+        tdResult.contentEditable = "true";
+        tdResult.textContent = "";
+        tr.appendChild(tdResult);
+
+        // 备注
+        const tdNote = document.createElement("td");
+        tdNote.contentEditable = "true";
+        tdNote.textContent = "";
+        tr.appendChild(tdNote);
+
+        tbody.appendChild(tr);
+
+        // 滚动并聚焦到日期
+        tr.scrollIntoView({ behavior: "smooth", block: "center" });
+        tdDate.focus();
+    });
+
+    // 点击「保存新记录到云端」
+    saveNewRowsBtn.addEventListener("click", async () => {
+        const newRows = Array.from(
+        tbody.querySelectorAll("tr[data-new='true']")
+        );
+        if (newRows.length === 0) {
+        alert("没有需要保存的新记录。");
+        return;
+        }
+
+        const payload = [];
+        for (const tr of newRows) {
+        const tds = tr.querySelectorAll("td");
+        const dateStr = (tds[1].textContent || "").trim();
+        const duration = (tds[2].textContent || "").trim();
+        const content = (tds[3].textContent || "").trim();
+        const result = (tds[4].textContent || "").trim();
+        const note = (tds[5].textContent || "").trim();
+
+        // 简单校验日期格式 YYYY-MM-DD
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            alert("日期格式请按 YYYY-MM-DD 填写，例如 2025-12-10。出错行序号：" + tds[0].textContent);
+            return;
+        }
+
+        payload.push({
+            date: dateStr,
+            duration,
+            content,
+            result,
+            note,
+        });
+        }
+
+        if (payload.length === 0) return;
+
+        saveNewRowsBtn.disabled = true;
+        saveNewRowsBtn.textContent = "保存中…";
+
+        const { data, error } = await supabaseClient
+        .from("climbing_logs")
+        .insert(payload)
+        .select();
+
+        saveNewRowsBtn.disabled = false;
+        saveNewRowsBtn.textContent = "💾 保存新记录到云端";
+
+        if (error) {
+        console.error("保存失败：", error);
+        alert("保存到云端失败，请稍后再试。");
+        return;
+        }
+
+        // 保存成功：重新加载一次数据 & 刷新日历
+        await loadLogsFromSupabase();
+
+        const calendarContainer = document.getElementById("calendar-2025");
+        if (calendarContainer) {
+        calendarContainer.innerHTML = "";
+        generateCalendar(2025, "calendar-2025");
+        initMonthTabs(2025);
+        }
+
+        alert("已成功保存到云端！");
+    });
+    }
+
+
+
+
+window.addEventListener("DOMContentLoaded", async () => {
+    // 1. 先加载攀岩记录（填表 + 填 climbDays）
+    await loadLogsFromSupabase();
+
+    // 2. 再用 climbDays 生成 2025 日历
+    generateCalendar(2025, "calendar-2025");
+    initMonthTabs(2025);
+    
+    // 3. 初始化新增行功能
+    initAddRow();
 });
 
 
