@@ -36,4 +36,14 @@
 - `index.html`：页面结构  
 
 ## 🏗 技术架构
+GitHub Pages（静态前端）
+│
+├── index.html # 页面结构
+├── main.css # 页面样式
+├── calendar.js # 日历组件
+├── logs.js # 训练记录模块（增删改查）
+└── supabase-client.js# Supabase 连接与全局变量
+│
+▼
+Supabase（PostgreSQL + API + RLS）
 
