@@ -63,7 +63,9 @@ function initAddRow() {
   const saveNewRowsBtn = document.getElementById("save-new-rows-btn");
   const saveEditsBtn = document.getElementById("save-edits-btn");
   const tbody = document.getElementById("log-tbody");
-  if (!addRowBtn || !saveNewRowsBtn || !saveEditsBtn || !tbody) return;
+  const deleteSelectedBtn = document.getElementById("delete-selected-btn");
+  if (!addRowBtn || !saveNewRowsBtn || !saveEditsBtn || !deleteSelectedBtn || !tbody) return;
+
 
   function getNextSeq() {
     const rows = tbody.querySelectorAll("tr");
@@ -264,7 +266,102 @@ function initAddRow() {
 
     alert("修改已保存到云端！");
   });
+
+
+
+  // 👉 删除当前选中行
+  deleteSelectedBtn.addEventListener("click", async () => {
+    const selected = tbody.querySelector("tr.highlight-row");
+    if (!selected) {
+      alert("请先点击要删除的那一行（整行会高亮）。");
+      return;
+    }
+
+    const seqCell = selected.querySelector("td");
+    const seqText = seqCell ? seqCell.textContent : "";
+
+    if (!confirm(`确定要删除第 ${seqText} 行记录吗？`)) {
+      return;
+    }
+
+    // 如果是新建未保存的行（data-new="true"）
+    if (selected.dataset.new === "true") {
+      selected.remove();
+      renumberRows();
+      return;
+    }
+
+    // 已存在 Supabase 的记录
+    const id = Number(selected.dataset.id);
+    if (!id) {
+      console.error("该行缺少 id，无法删除");
+      return;
+    }
+
+    deleteSelectedBtn.disabled = true;
+    deleteSelectedBtn.textContent = "删除中…";
+
+    const { error } = await supabaseClient
+      .from("climbing_logs")
+      .delete()
+      .eq("id", id);
+
+    deleteSelectedBtn.disabled = false;
+    deleteSelectedBtn.textContent = "🗑 删除当前选中行";
+
+    if (error) {
+      console.error("删除失败：", error);
+      alert("删除失败，请稍后再试。");
+      return;
+    }
+
+    // 删除成功：重新加载数据 + 日历
+    await loadLogsFromSupabase();
+    const calendarContainer = document.getElementById("calendar-2025");
+    if (calendarContainer) {
+      calendarContainer.innerHTML = "";
+      generateCalendar(2025, "calendar-2025");
+      initMonthTabs(2025);
+    }
+  });
 }
+
+
+
+// ===== 让点击表格行可以选中（高亮） =====
+function initRowSelection() {
+  const tbody = document.getElementById("log-tbody");
+  if (!tbody) return;
+
+  tbody.addEventListener("click", (e) => {
+    const tr = e.target.closest("tr");
+    if (!tr) return;
+
+    // 清除之前的高亮
+    document
+      .querySelectorAll("#log-tbody tr")
+      .forEach((row) => row.classList.remove("highlight-row"));
+
+    // 当前行高亮
+    tr.classList.add("highlight-row");
+  });
+}
+
+
+// ===== 删除后重新编号（序号列保持 1,2,3...） =====
+function renumberRows() {
+  const tbody = document.getElementById("log-tbody");
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll("tr");
+  rows.forEach((tr, idx) => {
+    const firstCell = tr.querySelector("td");
+    if (firstCell) {
+      firstCell.textContent = idx + 1;
+    }
+  });
+}
+
+
 
 // ===== 入口：页面加载完成后，先拉数据，再生成日历 & 初始化按钮 =====
 window.addEventListener("DOMContentLoaded", async () => {
@@ -272,4 +369,5 @@ window.addEventListener("DOMContentLoaded", async () => {
   generateCalendar(2025, "calendar-2025");
   initMonthTabs(2025);
   initAddRow();
+  initRowSelection();
 });
