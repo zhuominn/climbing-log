@@ -57,6 +57,9 @@ async function loadLogsFromSupabase() {
   });
 }
 
+
+
+
 // ===== 攀岩训练表格：新增行 + 保存新记录 + 保存修改 =====
 function initAddRow() {
   const addRowBtn = document.getElementById("add-row-btn");
@@ -71,6 +74,7 @@ function initAddRow() {
     const rows = tbody.querySelectorAll("tr");
     return rows.length + 1;
   }
+
 
   // 新增一行
   addRowBtn.addEventListener("click", () => {
@@ -131,6 +135,7 @@ function initAddRow() {
     },
     true
   );
+
 
   // 保存新记录到云端
   saveNewRowsBtn.addEventListener("click", async () => {
@@ -197,6 +202,7 @@ function initAddRow() {
 
     alert("新记录已保存到云端！");
   });
+
 
   // 保存已修改行（UPDATE）
   saveEditsBtn.addEventListener("click", async () => {
@@ -266,7 +272,6 @@ function initAddRow() {
 
     alert("修改已保存到云端！");
   });
-
 
 
   // 👉 删除当前选中行
