@@ -1,15 +1,21 @@
 # 🧗‍♀️ Climbing Log —— 攀岩训练记录系统
 
-这是一个由 Zhuomin 开发的 **全栈 Web App**，用于记录每一次攀岩训练、追踪进步、以日历方式呈现训练频率 ——  
-支持 **云端存储、动态渲染、可视化日历、高亮定位、在线编辑、增删改查**。
-
-项目完全基于 **前后端分离** 的架构：  
-前端使用 GitHub Pages 部署，后端使用 Supabase 云数据库，  
-无需自建服务器，即可获得一个可长期维护的在线训练记录系统。
+这是一个由 Zhuomin 开发的 **全栈 Web App**，用于记录每一次攀岩训练、追踪进步、以日历方式呈现训练频率。
 
 ---
 
 ## ✨ 功能特性
+
+### 🔐 多用户登录（Supabase Auth）
+- 支持邮箱 + 密码登录
+- 登录状态自动持久化（刷新页面不丢失）
+- 未登录用户为只读模式
+
+### 🔒 用户级数据隔离（Row Level Security）
+- 每条攀岩记录都绑定所属用户（`user_id`）
+- 用户 **只能读取 / 编辑 / 删除自己的数据**
+- 不同用户之间完全不可见、不可越权
+- 安全由 Supabase RLS 在数据库层强制保证
 
 ### 🗓 动态全年攀岩日历
 - 自动生成 2025 年 12 个月日历  
@@ -23,27 +29,57 @@
 - **U**：表格可直接编辑，点击按钮一键保存修改  
 - **D**：选中行 → 点击按钮可删除（含云端同步）
 
+### 🔗 只读分享模式（无需登录）
+- 登录用户可一键生成 **只读分享链接**
+- 打开分享链接的用户：
+- ❌ 无需登录
+- ✅ 可查看完整表格 + 日历
+- ❌ 不能新增 / 编辑 / 删除
+- 分享数据通过 Supabase RPC 函数安全返回，避免数据库暴露
+
 ### ☁️ 云端存储（Supabase）
 - 自动持久化攀岩日志  
 - 任何设备打开网页都能看到最新数据  
 - 无需手动修改 HTML 文件
 
-### 🧩 模块化前端架构
-- `supabase-client.js`：Supabase API 客户端  
-- `calendar.js`：日历模块（UI 组件）  
-- `logs.js`：攀岩训练记录模块（业务逻辑）  
-- `main.css`：页面样式  
-- `index.html`：页面结构  
-
 ## 🏗 技术架构
+
 GitHub Pages（静态前端）
 │
-├── index.html # 页面结构
-├── main.css # 页面样式
-├── calendar.js # 日历组件
-├── logs.js # 训练记录模块（增删改查）
-└── supabase-client.js# Supabase 连接与全局变量
+├── index.html
+│   └── 页面结构
+│
+├── main.css
+│   └── 全局样式
+│
+├── calendar.js
+│   └── 日历组件（全年日历 / 月份切换 / 日期高亮）
+│
+├── logs.js
+│   └── 攀岩记录业务逻辑（CRUD）
+│
+├── auth.js
+│   └── 登录 / 登出 UI 与状态管理
+│
+├── share.js
+│   └── 分享链接生成 & 只读分享模式
+│
+└── supabase-client.js
+    └── Supabase 客户端初始化 & 全局状态
 │
 ▼
-Supabase（PostgreSQL + API + RLS）
+Supabase（云后端）
+│
+├── Auth
+│   └── 用户登录与身份认证
+│
+├── PostgreSQL Database
+│   └── climbing_logs（基于 user_id 的数据隔离）
+│
+├── Row Level Security (RLS)
+│   └── auth.uid() = user_id
+│
+└── RPC Functions
+    └── 分享模式下按 token 返回只读数据
+
 
