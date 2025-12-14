@@ -109,6 +109,10 @@ function initMonthTabs(year) {
   const panels = calendarContainer.querySelectorAll(".month-panel");
 
   function setActiveMonth(monthIndex) {
+    // 更新全局状态
+    window.currentMonthIndex = monthIndex;
+    localStorage.setItem("climbing_currentMonthIndex", String(monthIndex));
+
     tabs.forEach((tab) => {
       tab.classList.toggle(
         "active",
@@ -121,8 +125,8 @@ function initMonthTabs(year) {
         Number(panel.dataset.month) === monthIndex
       );
     });
-    
-    // ✅ 新增：通知其他模块（比如表格）当前月份变了
+
+    // 通知其他模块（比如表格）当前月份变了
     window.dispatchEvent(
       new CustomEvent("month-changed", {
         detail: { year, monthIndex }, // monthIndex: 0-11
@@ -137,6 +141,8 @@ function initMonthTabs(year) {
     });
   });
 
-  // 默认显示 11 月（即索引 10），你也可以改成 0 显示 1 月
-  setActiveMonth(10);
+  const saved = localStorage.getItem("climbing_currentMonthIndex");
+  const defaultMonthIndex = saved !== null ? Number(saved) : 10; // 没存过就默认 11 月
+  setActiveMonth(defaultMonthIndex);
+
 }

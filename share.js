@@ -167,8 +167,10 @@ window.addEventListener("DOMContentLoaded", async () => {
     const { year, monthIndex } = e.detail;
     window.tableFilter.filterTableByMonth(year, monthIndex);
   });
-
-// 渲染完成后，默认按当前展示月份过滤一下（比如 11 月）
-window.tableFilter.filterTableByMonth(2025, 10);
+  // ✅ 首次加载后，按当前选中月份过滤
+  window.tableFilter.filterTableByMonth(
+    window.currentYear,
+    window.currentMonthIndex
+  );
 
 });

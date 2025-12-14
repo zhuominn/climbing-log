@@ -211,6 +211,12 @@ function initAddRow() {
     }
 
     await loadLogsFromSupabase();
+
+    window.tableFilter.filterTableByMonth(
+      window.currentYear,
+      window.currentMonthIndex
+    );
+
     const calendarContainer = document.getElementById("calendar-2025");
     if (calendarContainer) {
       calendarContainer.innerHTML = "";
@@ -287,6 +293,12 @@ function initAddRow() {
     }
 
     await loadLogsFromSupabase();
+
+    window.tableFilter.filterTableByMonth(
+      window.currentYear,
+      window.currentMonthIndex
+    );
+
     const calendarContainer = document.getElementById("calendar-2025");
     if (calendarContainer) {
       calendarContainer.innerHTML = "";
@@ -351,6 +363,12 @@ function initAddRow() {
 
     // 删除成功：重新加载数据 + 日历
     await loadLogsFromSupabase();
+
+    window.tableFilter.filterTableByMonth(
+      window.currentYear,
+      window.currentMonthIndex
+    );
+    
     const calendarContainer = document.getElementById("calendar-2025");
     if (calendarContainer) {
       calendarContainer.innerHTML = "";
@@ -420,6 +438,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   initAddRow();
   initRowSelection();
 
-  // ✅ 首次加载后，按默认月份过滤一次（和 initMonthTabs 默认展示的月份保持一致）
-  window.tableFilter.filterTableByMonth(2025, 10); // 10 = 11月
+  // ✅ 首次加载后，按当前选中月份过滤
+  window.tableFilter.filterTableByMonth(
+    window.currentYear,
+    window.currentMonthIndex
+  );
 });

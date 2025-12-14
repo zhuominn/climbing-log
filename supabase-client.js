@@ -38,3 +38,8 @@ supabaseClient.auth.onAuthStateChange((_event, session) => {
 // 暴露给其他脚本调用
 window.initAuthSession = initAuthSession;
 
+
+// ===== 全局 UI 状态 =====
+// 默认月份（0-11），与你日历默认展示的月份一致
+window.currentMonthIndex = 10; // 10 = 11 月
+window.currentYear = 2025;
