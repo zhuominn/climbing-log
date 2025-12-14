@@ -59,6 +59,13 @@ async function loadLogsFromSupabase() {
 
 
 
+// 判断是否是分享模式
+function isShareMode() {
+  const params = new URLSearchParams(window.location.search);
+  return !!params.get("share");
+}
+
+
 
 // ===== 攀岩训练表格：新增行 + 保存新记录 + 保存修改 =====
 function initAddRow() {
@@ -392,6 +399,9 @@ function renumberRows() {
 
 // ===== 入口：页面加载完成后，先拉数据，再生成日历 & 初始化按钮 =====
 window.addEventListener("DOMContentLoaded", async () => {
+  // ✅ 分享模式：交给 share.js 渲染，不要执行默认加载
+  if (isShareMode()) return;
+  
   if (window.initAuthSession) {
     await window.initAuthSession();
   }
