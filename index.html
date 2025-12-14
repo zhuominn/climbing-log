@@ -13,32 +13,62 @@
       <p>记录每一次攀岩的日期、内容和达成情况，方便长期对比和回顾。</p>
     </header>
 
+
+    <!-- 🔐 登录区域 -->
+    <section class="card" id="auth-card">
+      <div class="auth-row">
+        <span id="auth-status">未登录</span>
+      </div>
+      <div class="auth-row">
+        <input
+          type="email"
+          id="auth-email"
+          placeholder="登录邮箱"
+          autocomplete="email"
+        />
+        <input
+          type="password"
+          id="auth-password"
+          placeholder="密码"
+          autocomplete="current-password"
+        />
+        <button id="auth-login-btn" class="btn-secondary">登录</button>
+        <button id="auth-logout-btn" class="btn-secondary" style="display:none;">
+          退出登录
+        </button>
+      </div>
+      <p class="note">
+        说明：未登录时只能查看记录，登录后才可以新增、编辑和删除攀岩记录。
+      </p>
+    </section>
+
+
     <!-- 自动生成的 2025 攀岩日历（带月份 tab） -->
-<section class="card">
-  <h2 class="card-title">
-    <span class="icon">📅</span>
-    攀岩日历（2025）
-  </h2>
+    <section class="card">
+      <h2 class="card-title">
+        <span class="icon">📅</span>
+        攀岩日历（2025）
+      </h2>
 
-  <!-- 月份 tab -->
-  <div class="month-tabs" id="month-tabs-2025">
-    <button class="month-tab active" data-month="0">1 月</button>
-    <button class="month-tab" data-month="1">2 月</button>
-    <button class="month-tab" data-month="2">3 月</button>
-    <button class="month-tab" data-month="3">4 月</button>
-    <button class="month-tab" data-month="4">5 月</button>
-    <button class="month-tab" data-month="5">6 月</button>
-    <button class="month-tab" data-month="6">7 月</button>
-    <button class="month-tab" data-month="7">8 月</button>
-    <button class="month-tab" data-month="8">9 月</button>
-    <button class="month-tab" data-month="9">10 月</button>
-    <button class="month-tab" data-month="10">11 月</button>
-    <button class="month-tab" data-month="11">12 月</button>
-  </div>
+      <!-- 月份 tab -->
+      <div class="month-tabs" id="month-tabs-2025">
+        <button class="month-tab active" data-month="0">1 月</button>
+        <button class="month-tab" data-month="1">2 月</button>
+        <button class="month-tab" data-month="2">3 月</button>
+        <button class="month-tab" data-month="3">4 月</button>
+        <button class="month-tab" data-month="4">5 月</button>
+        <button class="month-tab" data-month="5">6 月</button>
+        <button class="month-tab" data-month="6">7 月</button>
+        <button class="month-tab" data-month="7">8 月</button>
+        <button class="month-tab" data-month="8">9 月</button>
+        <button class="month-tab" data-month="9">10 月</button>
+        <button class="month-tab" data-month="10">11 月</button>
+        <button class="month-tab" data-month="11">12 月</button>
+      </div>
 
-  <!-- 这里会由 JS 动态生成每个月的日历 -->
-  <div id="calendar-2025"></div>
-</section>
+      <!-- 这里会由 JS 动态生成每个月的日历 -->
+      <div id="calendar-2025"></div>
+    </section>
 
 
     <!-- 原来的攀岩训练明细表格 -->
@@ -70,7 +100,6 @@
         <tbody id="log-tbody">
         </tbody>
       </table>
-
     </section>
   </div>
 
@@ -78,6 +107,7 @@
   <script src="supabase-client.js"></script>
   <script src="calendar.js"></script>
   <script src="logs.js"></script>
+  <script src="auth.js"></script>
 
 </body>
 </html>

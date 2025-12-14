@@ -78,6 +78,11 @@ function initAddRow() {
 
   // 新增一行
   addRowBtn.addEventListener("click", () => {
+    if (!window.currentUser) {
+      alert("请先登录后再新增记录。");
+      return;
+    }
+
     const seq = getNextSeq();
     const tr = document.createElement("tr");
     tr.dataset.new = "true";
@@ -139,6 +144,11 @@ function initAddRow() {
 
   // 保存新记录到云端
   saveNewRowsBtn.addEventListener("click", async () => {
+    if (!window.currentUser) {
+      alert("请先登录后再保存新记录。");
+      return;
+    }
+
     const newRows = Array.from(
       tbody.querySelectorAll("tr[data-new='true']")
     );
@@ -206,6 +216,11 @@ function initAddRow() {
 
   // 保存已修改行（UPDATE）
   saveEditsBtn.addEventListener("click", async () => {
+    if (!window.currentUser) {
+      alert("请先登录后再保存已修改行。");
+      return;
+    }
+
     const editedRows = Array.from(
       tbody.querySelectorAll("tr[data-dirty='true']")
     ).filter((tr) => tr.dataset.new !== "true");
@@ -276,6 +291,11 @@ function initAddRow() {
 
   // 👉 删除当前选中行
   deleteSelectedBtn.addEventListener("click", async () => {
+    if (!window.currentUser) {
+      alert("请先登录后再进行删除操作。");
+      return;
+    }
+
     const selected = tbody.querySelector("tr.highlight-row");
     if (!selected) {
       alert("请先点击要删除的那一行（整行会高亮）。");
@@ -370,6 +390,10 @@ function renumberRows() {
 
 // ===== 入口：页面加载完成后，先拉数据，再生成日历 & 初始化按钮 =====
 window.addEventListener("DOMContentLoaded", async () => {
+  if (window.initAuthSession) {
+    await window.initAuthSession();
+  }
+  
   await loadLogsFromSupabase();
   generateCalendar(2025, "calendar-2025");
   initMonthTabs(2025);

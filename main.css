@@ -41,6 +41,31 @@
       color: var(--text-sub);
     }
 
+    #auth-card {
+      margin-bottom: 16px;
+    }
+
+    .auth-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    #auth-status {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    #auth-email,
+    #auth-password {
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
     .card {
       background: var(--card-bg);
       border-radius: 12px;
