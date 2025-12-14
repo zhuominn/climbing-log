@@ -121,6 +121,13 @@ function initMonthTabs(year) {
         Number(panel.dataset.month) === monthIndex
       );
     });
+    
+    // ✅ 新增：通知其他模块（比如表格）当前月份变了
+    window.dispatchEvent(
+      new CustomEvent("month-changed", {
+        detail: { year, monthIndex }, // monthIndex: 0-11
+      })
+    );
   }
 
   tabs.forEach((tab) => {

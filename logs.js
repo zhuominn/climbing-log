@@ -399,16 +399,27 @@ function renumberRows() {
 
 // ===== 入口：页面加载完成后，先拉数据，再生成日历 & 初始化按钮 =====
 window.addEventListener("DOMContentLoaded", async () => {
+  
   // ✅ 分享模式：交给 share.js 渲染，不要执行默认加载
   if (isShareMode()) return;
-  
+
   if (window.initAuthSession) {
     await window.initAuthSession();
   }
 
   await loadLogsFromSupabase();
+
+  // ✅ 先监听月份切换事件（点 tab 会触发表格过滤）
+  window.addEventListener("month-changed", (e) => {
+    const { year, monthIndex } = e.detail;
+    window.tableFilter.filterTableByMonth(year, monthIndex);
+  });
+
   generateCalendar(2025, "calendar-2025");
   initMonthTabs(2025);
   initAddRow();
   initRowSelection();
+
+  // ✅ 首次加载后，按默认月份过滤一次（和 initMonthTabs 默认展示的月份保持一致）
+  window.tableFilter.filterTableByMonth(2025, 10); // 10 = 11月
 });

@@ -161,4 +161,14 @@ window.addEventListener("DOMContentLoaded", async () => {
     // 非分享模式：初始化分享按钮（只对登录用户显示）
     initShareButtons();
   }
+
+
+  window.addEventListener("month-changed", (e) => {
+    const { year, monthIndex } = e.detail;
+    window.tableFilter.filterTableByMonth(year, monthIndex);
+  });
+
+// 渲染完成后，默认按当前展示月份过滤一下（比如 11 月）
+window.tableFilter.filterTableByMonth(2025, 10);
+
 });
