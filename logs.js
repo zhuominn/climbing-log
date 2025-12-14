@@ -180,6 +180,7 @@ function initAddRow() {
         content,
         result,
         note,
+        user_id: window.currentUser.id,
       });
     }
 
@@ -255,6 +256,7 @@ function initAddRow() {
         content,
         result,
         note,
+        user_id: window.currentUser.id,
       });
     }
 
@@ -393,7 +395,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   if (window.initAuthSession) {
     await window.initAuthSession();
   }
-  
+
   await loadLogsFromSupabase();
   generateCalendar(2025, "calendar-2025");
   initMonthTabs(2025);
