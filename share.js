@@ -91,9 +91,8 @@ async function loadSharedLogs(token) {
 async function initShareButtons() {
   const genBtn = document.getElementById("generate-share-btn");
   const copyBtn = document.getElementById("copy-share-btn");
-  const preview = document.getElementById("share-link-preview");
 
-  if (!genBtn || !copyBtn || !preview) return;
+  if (!genBtn || !copyBtn) return;
 
   let currentShareLink = "";
 
@@ -105,7 +104,6 @@ async function initShareButtons() {
     // copyBtn 只有生成后才显示
     if (!show) {
       copyBtn.style.display = "none";
-      preview.textContent = "";
       currentShareLink = "";
     }
   });
@@ -136,7 +134,6 @@ async function initShareButtons() {
     }
 
     currentShareLink = `${window.location.origin}${window.location.pathname}?share=${token}`;
-    preview.textContent = currentShareLink;
     copyBtn.style.display = "inline-flex";
     alert("分享链接已生成！");
   });
