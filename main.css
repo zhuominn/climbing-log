@@ -160,6 +160,11 @@
       margin-top: 10px;
     }
 
+    .log-cell {
+    white-space: pre-wrap;
+    }
+
+
     @media (max-width: 640px) {
       header h1 {
         font-size: 20px;

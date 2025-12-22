@@ -31,6 +31,7 @@ async function loadLogsFromSupabase() {
     function addEditableCell(value, options = {}) {
       const td = document.createElement("td");
       td.textContent = value ?? "";
+      td.classList.add("log-cell");
       td.contentEditable = "true";
       if (options.dateCell) {
         td.dataset.dateCell = "true";
