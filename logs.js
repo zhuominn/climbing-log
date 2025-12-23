@@ -1,3 +1,26 @@
+function addEditableCellToRow(tr, value, options = {}) {
+  const td = document.createElement("td");
+  const div = document.createElement("div");
+
+  div.classList.add("log-cell");
+  div.textContent = value ?? "";
+  div.contentEditable = "true";
+
+  if (options.dateCell) {
+    div.dataset.dateCell = "true";
+  }
+
+  div.addEventListener("input", () => {
+    tr.dataset.dirty = "true";
+    tr.classList.add("edited-row");
+  });
+
+  td.appendChild(div);
+  tr.appendChild(td);
+  return div; // 返回 div，方便 focus
+}
+
+
 // ===== 从 Supabase 加载攀岩记录并渲染表格 =====
 async function loadLogsFromSupabase() {
   const tbody = document.getElementById("log-tbody");
@@ -27,28 +50,11 @@ async function loadLogsFromSupabase() {
     tdSeq.textContent = index + 1;
     tr.appendChild(tdSeq);
 
-    // 小工具函数：创建可编辑单元格
-    function addEditableCell(value, options = {}) {
-      const td = document.createElement("td");
-      td.textContent = value ?? "";
-      td.classList.add("log-cell");
-      td.contentEditable = "true";
-      if (options.dateCell) {
-        td.dataset.dateCell = "true";
-      }
-      td.addEventListener("input", () => {
-        tr.dataset.dirty = "true";
-        tr.classList.add("edited-row");
-      });
-      tr.appendChild(td);
-      return td;
-    }
-
-    addEditableCell(row.date, { dateCell: true });       // 日期
-    addEditableCell(row.duration || "—");                // 时长
-    addEditableCell(row.content || "");                  // 主要内容
-    addEditableCell(row.result || "");                   // 达成情况
-    addEditableCell(row.note || "");                     // 备注
+    addEditableCellToRow(tr, row.date, { dateCell: true });       // 日期
+    addEditableCellToRow(tr, row.duration || "—");                // 时长
+    addEditableCellToRow(tr, row.content || "");                  // 主要内容
+    addEditableCellToRow(tr, row.result || "");                   // 达成情况
+    addEditableCellToRow(tr, row.note || "");                     // 备注
 
     tbody.appendChild(tr);
 
@@ -99,36 +105,24 @@ function initAddRow() {
     tdSeq.textContent = seq;
     tr.appendChild(tdSeq);
 
-    const tdDate = document.createElement("td");
-    tdDate.contentEditable = "true";
-    tdDate.dataset.dateCell = "true";
-    tdDate.textContent = "2025-12-10";
-    tr.appendChild(tdDate);
+    const cells = [
+      { value: "2025-12-10", options: { dateCell: true } },
+      { value: "—" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+    ];
 
-    const tdDuration = document.createElement("td");
-    tdDuration.contentEditable = "true";
-    tdDuration.textContent = "—";
-    tr.appendChild(tdDuration);
-
-    const tdContent = document.createElement("td");
-    tdContent.contentEditable = "true";
-    tdContent.textContent = "";
-    tr.appendChild(tdContent);
-
-    const tdResult = document.createElement("td");
-    tdResult.contentEditable = "true";
-    tdResult.textContent = "";
-    tr.appendChild(tdResult);
-
-    const tdNote = document.createElement("td");
-    tdNote.contentEditable = "true";
-    tdNote.textContent = "";
-    tr.appendChild(tdNote);
+    let dateDiv = null;
+    cells.forEach((c, idx) => {
+      const div = addEditableCellToRow(tr, c.value, c.options || {});
+      if (idx === 0) dateDiv = div;
+    });
 
     tbody.appendChild(tr);
 
     tr.scrollIntoView({ behavior: "smooth", block: "center" });
-    tdDate.focus();
+    dateDiv?.focus();
   });
 
   // 日期单元格失焦：设置 tr.id 供日历跳转用
@@ -380,23 +374,31 @@ function initAddRow() {
 }
 
 
-
 // ===== 让点击表格行可以选中（高亮） =====
 function initRowSelection() {
   const tbody = document.getElementById("log-tbody");
   if (!tbody) return;
 
+  // 行点击行为：
+  // 单击某行 → 如果原来是折叠：该行展开 + 高亮
+  // 再单击同一行 → 原来已展开：会被收起（保持折叠）+ 高亮还在
+  // 单击另一行 → 前一行自动折叠，新行展开 + 高亮
   tbody.addEventListener("click", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
 
-    // 清除之前的高亮
-    document
-      .querySelectorAll("#log-tbody tr")
-      .forEach((row) => row.classList.remove("highlight-row"));
+    const isExpanded = tr.classList.contains("row-expanded");
 
-    // 当前行高亮
+    document.querySelectorAll("#log-tbody tr").forEach((row) => {
+      row.classList.remove("highlight-row");
+      row.classList.remove("row-expanded");
+    });
+
     tr.classList.add("highlight-row");
+
+    if (!isExpanded) {
+      tr.classList.add("row-expanded");
+    }
   });
 }
 

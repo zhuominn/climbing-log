@@ -7,268 +7,378 @@
       --accent: #4f46e5;
       --highlight: #f1efff;
     }
+    
+/* ==========================================================================
+  Base
+  ========================================================================== */
+* {
+  box-sizing: border-box;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text-main);
-    }
+/* ==========================================================================
+  Layout
+  ========================================================================== */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
 
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
+header {
+  margin-bottom: 24px;
+}
 
-    header {
-      margin-bottom: 24px;
-    }
+header h1 {
+  font-size: 24px;
+  margin: 0 0 4px;
+}
 
-    header h1 {
-      font-size: 24px;
-      margin: 0 0 4px;
-    }
+header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-sub);
+}
 
-    header p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--text-sub);
-    }
+/* ==========================================================================
+   Auth
+   ========================================================================== */
+#auth-card {
+  margin-bottom: 16px;
+}
 
-    #auth-card {
-      margin-bottom: 16px;
-    }
+.auth-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
 
-    .auth-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
+#auth-status {
+  font-size: 13px;
+  color: var(--text-sub);
+}
 
-    #auth-status {
-      font-size: 13px;
-      color: var(--text-sub);
-    }
+#auth-email,
+#auth-password {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
 
-    #auth-email,
-    #auth-password {
-      padding: 4px 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-    }
+/* ==========================================================================
+   Card
+   ========================================================================== */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 16px 16px 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      padding: 16px 16px 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-    }
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin: 0 0 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.card-title span.icon {
+  font-size: 18px;
+}
 
-    .card-title span.icon {
-      font-size: 18px;
-    }
+/* ==========================================================================
+   Row states
+   ========================================================================== */
+.highlight-row {
+  background: var(--highlight) !important;
+  transition: background 0.3s;
+}
 
-    .highlight-row {
-      background: var(--highlight) !important;
-      transition: background 0.3s;
-    }
+.edited-row:not(.highlight-row) {
+  outline: 1px dashed #f2a654;
+}
 
-    .btn-secondary {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 10px;
-        margin-bottom: 4px;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        background: #f5f5fb;
-        font-size: 12px;
-        color: var(--text-sub);
-        cursor: pointer;
-    }
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    margin-bottom: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #f5f5fb;
+    font-size: 12px;
+    color: var(--text-sub);
+    cursor: pointer;
+}
 
-    .btn-secondary:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-    }
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
 
-    .edited-row:not(.highlight-row) {
-        outline: 1px dashed #f2a654;
-    }
+/* ==========================================================================
+   Table (base)
+   ========================================================================== */    
+table {
+    width: 100%;
+    border-collapse: collapse;
+  font-size: 13px;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-      font-size: 13px;
-    }
+thead {
+  background: #f2f2f8;
+}
 
-    thead {
-      background: #f2f2f8;
-    }
+th,
+td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
 
-    th,
-    td {
-      padding: 8px 6px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-      vertical-align: top;
-    }
+th {
+  font-weight: 600;
+  color: var(--text-sub);
+  font-size: 12px;
+}
 
-    th {
-      font-weight: 600;
-      color: var(--text-sub);
-      font-size: 12px;
-    }
+thead th {
+  text-align: center;
+  vertical-align: middle;
+}
 
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
+tbody tr:last-child td {
+  border-bottom: none;
+}
 
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(79, 70, 229, 0.3);
-      font-size: 11px;
-      color: var(--accent);
-      background: rgba(79, 70, 229, 0.03);
-    }
+/* ==========================================================================
+   Small UI elements
+   ========================================================================== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(79, 70, 229, 0.03);
+}
 
-    .note {
-      font-size: 11px;
-      color: var(--text-sub);
-      margin-top: 10px;
-    }
+.note {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-top: 10px;
+}
 
-    .log-cell {
-    white-space: pre-wrap;
-    }
+/* ==========================================================================
+   Log table cells (padding + multiline clamp)
+   ========================================================================== */
+#log-tbody td {
+  padding: 10px 12px;
+  vertical-align: top;
+}
 
+.log-cell {
+  white-space: pre-wrap;
+  word-break: break-word;
 
-    @media (max-width: 640px) {
-      header h1 {
-        font-size: 20px;
-      }
+  line-height: 22px;
+  max-height: calc(22px * 3);
+  overflow: hidden;
+}
 
-      table {
-        font-size: 12px;
-      }
+/* 1-3 列（序号/日期/时长）表头 + 内容：居中 */
+#log-tbody td:nth-child(1),
+#log-tbody td:nth-child(2),
+#log-tbody td:nth-child(3),
+thead th:nth-child(1),
+thead th:nth-child(2),
+thead th:nth-child(3) {
+  text-align: center;
+  vertical-align: middle;
+}
 
-      th,
-      td {
-        padding: 6px 4px;
-      }
+/* 4-6 列（内容/达成情况/备注）保持左对齐 */
+#log-tbody td:nth-child(4),
+#log-tbody td:nth-child(5),
+#log-tbody td:nth-child(6) {
+  text-align: left;
+  vertical-align: middle;
+}
 
-      .page {
-        padding-inline: 12px;
-      }
-    }
-            /* 攀岩日历样式 */
-    .calendar-block {
-      margin-bottom: 16px;
-    }
+/* 日期单元格：不允许换行 */
+[data-date-cell="true"] {
+  white-space: nowrap;
+  word-break: normal;
+}
 
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      font-size: 13px;
-      color: var(--text-sub);
-    }
+#log-tbody tr.row-expanded .log-cell {
+  max-height: none;
+}
 
-    .calendar-title {
-      font-weight: 600;
-      color: var(--text-main);
-    }
+/* ==========================================================================
+   Editing state: only a thin left bar (no border / no bg)
+   ========================================================================== */
 
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      font-size: 11px;
-      margin-bottom: 12px;
-    }
+/* 去掉浏览器默认的黑色 focus 框 */
+.log-cell:focus {
+  outline: none;
+}
 
-    .calendar-weekday {
-      text-align: center;
-      font-weight: 600;
-      color: var(--text-sub);
-      padding: 2px 0;
-    }
+/* 默认不显示左边条（避免非编辑时影响布局） */
+.log-cell {
+  border-left: 3px solid transparent; /* 细色条宽度可改 2px/3px */
+}
 
-    .day {
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      color: var(--text-main);
-    }
+/* 编辑时：左侧色条 + 与文字留出间距 */
+.log-cell:focus {
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
 
-    .day-empty {
-      background: transparent;
-    }
+  border-left: 2px solid rgba(79, 70, 229, 0.7);
 
-    .day-number {
-      padding: 2px 4px;
-    }
+  padding-left: 8px;   /* ✅ 色条和文字的距离（可调 8~14px） */
+  margin-left: -8px;   /* ✅ 抵消 padding 带来的整体右移，不影响列宽 */
+}
 
-    .day.climb-day {
-      border: 1px solid var(--accent);
-      background: rgba(79, 70, 229, 0.06);
-      font-weight: 600;
-    }
+/* ==========================================================================
+   Calendar
+   ========================================================================== */
+.calendar-block {
+  margin-bottom: 16px;
+}
 
-        /* 月份 tab 样式 */
-    .month-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-sub);
+}
 
-    .month-tab {
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f5f5fb;
-      padding: 4px 10px;
-      cursor: pointer;
-      color: var(--text-sub);
-      white-space: nowrap;
-    }
+.calendar-title {
+  font-weight: 600;
+  color: var(--text-main);
+}
 
-    .month-tab.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  font-size: 11px;
+  margin-bottom: 12px;
+}
 
-    .month-panel {
-      display: none;
-    }
+.calendar-weekday {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-sub);
+  padding: 2px 0;
+}
 
-    .month-panel.active {
-      display: block;
-    }
+.day {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--text-main);
+}
+
+.day-empty {
+  background: transparent;
+}
+
+.day-number {
+  padding: 2px 4px;
+}
+
+.day.climb-day {
+  border: 1px solid var(--accent);
+  background: rgba(79, 70, 229, 0.06);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Month tabs and panels
+   ========================================================================== */
+.month-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.month-tab {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f5f5fb;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: var(--text-sub);
+  white-space: nowrap;
+}
+
+.month-tab.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.month-panel {
+  display: none;
+}
+
+.month-panel.active {
+  display: block;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 640px) {
+  header h1 {
+    font-size: 20px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 6px 4px;
+  }
+
+  /* 手机上也同步缩小日志单元格 padding（否则会显得拥挤） */
+  #log-tbody td {
+    padding: 8px 8px;
+  }
+
+  .page {
+    padding-inline: 12px;
+  }
+}
