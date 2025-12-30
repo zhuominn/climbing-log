@@ -206,6 +206,12 @@ tbody tr:last-child td {
   overflow: hidden;
 }
 
+/* 编辑过的行：保持单元格展开显示全部内容 */
+.edited-row .log-cell {
+  max-height: none;
+  overflow: visible;
+}
+
 /* 1-3 列（序号/日期/时长）表头 + 内容：居中 */
 #log-tbody td:nth-child(1),
 #log-tbody td:nth-child(2),

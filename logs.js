@@ -84,6 +84,21 @@ function initAddRow() {
   if (!addRowBtn || !saveNewRowsBtn || !saveEditsBtn || !deleteSelectedBtn || !tbody) return;
 
 
+  function readLogCellText(td) {
+    const cell = td?.querySelector?.(".log-cell");
+    if (cell && typeof cell.innerText === "string") {
+      return cell.innerText;
+    }
+    if (cell && typeof cell.textContent === "string") {
+      return cell.textContent;
+    }
+    if (td && typeof td.textContent === "string") {
+      return td.textContent;
+    }
+    return "";
+  }
+
+
   function getNextSeq() {
     const rows = tbody.querySelectorAll("tr");
     return rows.length + 1;
@@ -162,11 +177,11 @@ function initAddRow() {
     const payload = [];
     for (const tr of newRows) {
       const tds = tr.querySelectorAll("td");
-      const dateStr = (tds[1].textContent || "").trim();
-      const duration = (tds[2].textContent || "").trim();
-      const content = (tds[3].textContent || "").trim();
-      const result = (tds[4].textContent || "").trim();
-      const note = (tds[5].textContent || "").trim();
+      const dateStr = readLogCellText(tds[1]).trim();
+      const duration = readLogCellText(tds[2]).trim();
+      const content = readLogCellText(tds[3]).trim();
+      const result = readLogCellText(tds[4]).trim();
+      const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
         alert(
@@ -243,11 +258,11 @@ function initAddRow() {
     for (const tr of editedRows) {
       const id = Number(tr.dataset.id);
       const tds = tr.querySelectorAll("td");
-      const dateStr = (tds[1].textContent || "").trim();
-      const duration = (tds[2].textContent || "").trim();
-      const content = (tds[3].textContent || "").trim();
-      const result = (tds[4].textContent || "").trim();
-      const note = (tds[5].textContent || "").trim();
+      const dateStr = readLogCellText(tds[1]).trim();
+      const duration = readLogCellText(tds[2]).trim();
+      const content = readLogCellText(tds[3]).trim();
+      const result = readLogCellText(tds[4]).trim();
+      const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
         alert(
@@ -380,14 +395,11 @@ function initRowSelection() {
   if (!tbody) return;
 
   // 行点击行为：
-  // 单击某行 → 如果原来是折叠：该行展开 + 高亮
-  // 再单击同一行 → 原来已展开：会被收起（保持折叠）+ 高亮还在
-  // 单击另一行 → 前一行自动折叠，新行展开 + 高亮
+  // 单击某行 → 该行展开 + 高亮（不会因再次点击同一行而折叠）
+  // 单击另一行 → 前一行折叠，新行展开 + 高亮
   tbody.addEventListener("click", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
-
-    const isExpanded = tr.classList.contains("row-expanded");
 
     document.querySelectorAll("#log-tbody tr").forEach((row) => {
       row.classList.remove("highlight-row");
@@ -396,9 +408,7 @@ function initRowSelection() {
 
     tr.classList.add("highlight-row");
 
-    if (!isExpanded) {
-      tr.classList.add("row-expanded");
-    }
+    tr.classList.add("row-expanded");
   });
 }
 
