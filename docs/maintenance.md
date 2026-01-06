@@ -147,3 +147,37 @@
 - **Files**：
   - `logs.js`
   - `main.css`
+
+### 2026-01-06
+
+- **Change**：
+  - 将页面脚本/样式迁移到 `assets/`，并切换为 ES Modules：页面仅保留 `type="module"` 入口脚本，避免旧脚本重复绑定事件。
+  - 新增“年页面”统一入口（`year.page.js`）：2025/2026 共用一套逻辑（加载数据 → 渲染月历/表格 → 月份过滤；2026 额外渲染 heatmap）。
+  - 新增 `reset-password.html` 与对应页面脚本，用于 Supabase recovery 链接落地后更新密码（兼容 `?code=` 与 `#access_token=` 两种回调形态）。
+  - 新增 `durationUtils.parseDurationToMinutes()`：严格解析 `x 小时`（含小数、含空格）用于 2026 heatmap 强度（分钟数，四舍五入）。
+- **Why**：
+  - 旧脚本与 ESM 混用会导致事件重复绑定、状态不一致（UMD 全局 session vs ESM session），从而出现“点击一次触发两次/跳转异常”等隐蔽问题。
+  - 2025/2026 逻辑复用，减少“年份写死”与重复维护成本。
+  - Supabase 登录报错（Invalid login credentials）需要通过 recovery 流程重置密码；增加独立页面避免依赖控制台手动改密码。
+- **How to test**：
+  - 1) 通过 `http://localhost:5173/` 打开 `index.html`：已登录跳 `2026.html`，未登录跳 `login.html?next=2026.html`。
+  - 2) `2026.html`：heatmap 正常渲染；点击有记录日期可定位并高亮表格行；月份 tab 切换后表格过滤正常。
+  - 3) Supabase 发送 recovery 邮件后，用邮件链接打开 `reset-password.html`：能设置新密码；更新后可用新密码登录。
+- **Files**：
+  - `index.html`
+  - `2025.html`
+  - `2026.html`
+  - `login.html`
+  - `reset-password.html`
+  - `assets/js/core/supabaseClient.js`
+  - `assets/js/pages/index.page.js`
+  - `assets/js/pages/login.page.js`
+  - `assets/js/pages/year.page.js`
+  - `assets/js/pages/resetPassword.page.js`
+  - `assets/js/data/logRepository.js`
+  - `assets/js/features/monthCalendar.js`
+  - `assets/js/features/githubHeatmap.js`
+  - `assets/js/features/tableFilter.js`
+  - `assets/js/shared/durationUtils.js`
+  - `assets/css/main.css`
+  - `assets/css/github-heatmap.css`

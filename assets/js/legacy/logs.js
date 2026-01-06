@@ -1,3 +1,16 @@
+function getPageYear() {
+  const y = Number(document.body?.dataset?.year);
+  return Number.isFinite(y) ? y : (window.currentYear || 2025);
+}
+
+function setEditorButtonsVisible(canEdit) {
+  const ids = ["add-row-btn", "save-new-rows-btn", "save-edits-btn", "delete-selected-btn"];
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = canEdit ? "inline-flex" : "none";
+  });
+}
+
 function addEditableCellToRow(tr, value, options = {}) {
   const td = document.createElement("td");
   const div = document.createElement("div");
@@ -17,18 +30,37 @@ function addEditableCellToRow(tr, value, options = {}) {
 
   td.appendChild(div);
   tr.appendChild(td);
-  return div; // 返回 div，方便 focus
+  return div;
 }
 
+function computeMinutesByDay(rows) {
+  const map = {};
+  for (const row of rows) {
+    const date = row?.date;
+    if (!date) continue;
+
+    const minutes = window.durationUtils?.parseDurationToMinutes?.(row.duration);
+    if (typeof minutes === "number" && Number.isFinite(minutes) && minutes > 0) {
+      map[date] = minutes;
+    }
+  }
+  return map;
+}
 
 // ===== 从 Supabase 加载攀岩记录并渲染表格 =====
 async function loadLogsFromSupabase() {
   const tbody = document.getElementById("log-tbody");
   if (!tbody) return;
 
+  const year = getPageYear();
+  const start = `${year}-01-01`;
+  const end = `${year}-12-31`;
+
   const { data, error } = await supabaseClient
     .from("climbing_logs")
     .select("*")
+    .gte("date", start)
+    .lte("date", end)
     .order("date", { ascending: true });
 
   if (error) {
@@ -39,22 +71,25 @@ async function loadLogsFromSupabase() {
   tbody.innerHTML = "";
   climbDays = [];
 
-  data.forEach((row, index) => {
+  // 供 2026 heatmap 使用
+  window.minutesByDay = computeMinutesByDay(data || []);
+
+  (data || []).forEach((row, index) => {
     const tr = document.createElement("tr");
     tr.dataset.id = row.id;
-    tr.id = "row-" + row.date;
+    tr.dataset.date = row.date || "";
+    tr.id = row.date ? "row-" + row.date : "";
     tr.dataset.new = "false";
 
-    // 序号
     const tdSeq = document.createElement("td");
     tdSeq.textContent = index + 1;
     tr.appendChild(tdSeq);
 
-    addEditableCellToRow(tr, row.date, { dateCell: true });       // 日期
-    addEditableCellToRow(tr, row.duration || "—");                // 时长
-    addEditableCellToRow(tr, row.content || "");                  // 主要内容
-    addEditableCellToRow(tr, row.result || "");                   // 达成情况
-    addEditableCellToRow(tr, row.note || "");                     // 备注
+    addEditableCellToRow(tr, row.date, { dateCell: true });
+    addEditableCellToRow(tr, row.duration || "—");
+    addEditableCellToRow(tr, row.content || "");
+    addEditableCellToRow(tr, row.result || "");
+    addEditableCellToRow(tr, row.note || "");
 
     tbody.appendChild(tr);
 
@@ -64,15 +99,29 @@ async function loadLogsFromSupabase() {
   });
 }
 
+function refreshYearVisuals() {
+  const year = getPageYear();
 
+  // 月历
+  const calendarContainer = document.getElementById("calendar-" + year);
+  if (calendarContainer) {
+    calendarContainer.innerHTML = "";
+    generateCalendar(year, "calendar-" + year);
+    initMonthTabs(year);
+  }
+
+  // heatmap（只要容器存在就渲染；2026 页会有）
+  const heatmapContainer = document.getElementById("heatmap-" + year);
+  if (heatmapContainer && typeof window.generateGithubHeatmap === "function") {
+    window.generateGithubHeatmap(year, "heatmap-" + year, window.minutesByDay || {});
+  }
+}
 
 // 判断是否是分享模式
 function isShareMode() {
   const params = new URLSearchParams(window.location.search);
   return !!params.get("share");
 }
-
-
 
 // ===== 攀岩训练表格：新增行 + 保存新记录 + 保存修改 =====
 function initAddRow() {
@@ -83,27 +132,24 @@ function initAddRow() {
   const deleteSelectedBtn = document.getElementById("delete-selected-btn");
   if (!addRowBtn || !saveNewRowsBtn || !saveEditsBtn || !deleteSelectedBtn || !tbody) return;
 
-
   function readLogCellText(td) {
     const cell = td?.querySelector?.(".log-cell");
-    if (cell && typeof cell.innerText === "string") {
-      return cell.innerText;
-    }
-    if (cell && typeof cell.textContent === "string") {
-      return cell.textContent;
-    }
-    if (td && typeof td.textContent === "string") {
-      return td.textContent;
-    }
+    if (cell && typeof cell.innerText === "string") return cell.innerText;
+    if (cell && typeof cell.textContent === "string") return cell.textContent;
+    if (td && typeof td.textContent === "string") return td.textContent;
     return "";
   }
-
 
   function getNextSeq() {
     const rows = tbody.querySelectorAll("tr");
     return rows.length + 1;
   }
 
+  function defaultDateForNewRow() {
+    const year = getPageYear();
+    const m = typeof window.currentMonthIndex === "number" ? window.currentMonthIndex : 0;
+    return `${year}-${String(m + 1).padStart(2, "0")}-01`;
+  }
 
   // 新增一行
   addRowBtn.addEventListener("click", () => {
@@ -121,7 +167,7 @@ function initAddRow() {
     tr.appendChild(tdSeq);
 
     const cells = [
-      { value: "2025-12-10", options: { dateCell: true } },
+      { value: defaultDateForNewRow(), options: { dateCell: true } },
       { value: "—" },
       { value: "" },
       { value: "" },
@@ -135,12 +181,11 @@ function initAddRow() {
     });
 
     tbody.appendChild(tr);
-
     tr.scrollIntoView({ behavior: "smooth", block: "center" });
     dateDiv?.focus();
   });
 
-  // 日期单元格失焦：设置 tr.id 供日历跳转用
+  // 日期单元格失焦：设置 tr.id / tr.dataset.date 供跳转与过滤使用
   tbody.addEventListener(
     "blur",
     (e) => {
@@ -151,13 +196,13 @@ function initAddRow() {
           const tr = target.closest("tr");
           if (tr) {
             tr.id = "row-" + text;
+            tr.dataset.date = text;
           }
         }
       }
     },
     true
   );
-
 
   // 保存新记录到云端
   saveNewRowsBtn.addEventListener("click", async () => {
@@ -166,9 +211,7 @@ function initAddRow() {
       return;
     }
 
-    const newRows = Array.from(
-      tbody.querySelectorAll("tr[data-new='true']")
-    );
+    const newRows = Array.from(tbody.querySelectorAll("tr[data-new='true']"));
     if (newRows.length === 0) {
       alert("没有需要保存的新记录。");
       return;
@@ -184,10 +227,7 @@ function initAddRow() {
       const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-        alert(
-          "日期格式请按 YYYY-MM-DD 填写，例如 2025-12-10。出错行序号：" +
-            tds[0].textContent
-        );
+        alert("日期格式请按 YYYY-MM-DD 填写。出错行序号：" + tds[0].textContent);
         return;
       }
 
@@ -201,15 +241,10 @@ function initAddRow() {
       });
     }
 
-    if (payload.length === 0) return;
-
     saveNewRowsBtn.disabled = true;
     saveNewRowsBtn.textContent = "保存中…";
 
-    const { data, error } = await supabaseClient
-      .from("climbing_logs")
-      .insert(payload)
-      .select();
+    const { error } = await supabaseClient.from("climbing_logs").insert(payload).select();
 
     saveNewRowsBtn.disabled = false;
     saveNewRowsBtn.textContent = "💾 保存新记录到云端";
@@ -221,22 +256,11 @@ function initAddRow() {
     }
 
     await loadLogsFromSupabase();
-
-    window.tableFilter.filterTableByMonth(
-      window.currentYear,
-      window.currentMonthIndex
-    );
-
-    const calendarContainer = document.getElementById("calendar-2025");
-    if (calendarContainer) {
-      calendarContainer.innerHTML = "";
-      generateCalendar(2025, "calendar-2025");
-      initMonthTabs(2025);
-    }
+    window.tableFilter.filterTableByMonth(window.currentYear, window.currentMonthIndex);
+    refreshYearVisuals();
 
     alert("新记录已保存到云端！");
   });
-
 
   // 保存已修改行（UPDATE）
   saveEditsBtn.addEventListener("click", async () => {
@@ -245,9 +269,8 @@ function initAddRow() {
       return;
     }
 
-    const editedRows = Array.from(
-      tbody.querySelectorAll("tr[data-dirty='true']")
-    ).filter((tr) => tr.dataset.new !== "true");
+    const editedRows = Array.from(tbody.querySelectorAll("tr[data-dirty='true']"))
+      .filter((tr) => tr.dataset.new !== "true");
 
     if (editedRows.length === 0) {
       alert("没有需要保存的修改。");
@@ -265,10 +288,7 @@ function initAddRow() {
       const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-        alert(
-          "日期格式请按 YYYY-MM-DD 填写，例如 2025-12-10。出错行序号：" +
-            tds[0].textContent
-        );
+        alert("日期格式请按 YYYY-MM-DD 填写。出错行序号：" + tds[0].textContent);
         return;
       }
 
@@ -283,15 +303,10 @@ function initAddRow() {
       });
     }
 
-    if (updates.length === 0) return;
-
     saveEditsBtn.disabled = true;
     saveEditsBtn.textContent = "保存修改中…";
 
-    const { data, error } = await supabaseClient
-      .from("climbing_logs")
-      .upsert(updates)
-      .select();
+    const { error } = await supabaseClient.from("climbing_logs").upsert(updates).select();
 
     saveEditsBtn.disabled = false;
     saveEditsBtn.textContent = "✅ 保存已修改行";
@@ -303,22 +318,11 @@ function initAddRow() {
     }
 
     await loadLogsFromSupabase();
-
-    window.tableFilter.filterTableByMonth(
-      window.currentYear,
-      window.currentMonthIndex
-    );
-
-    const calendarContainer = document.getElementById("calendar-2025");
-    if (calendarContainer) {
-      calendarContainer.innerHTML = "";
-      generateCalendar(2025, "calendar-2025");
-      initMonthTabs(2025);
-    }
+    window.tableFilter.filterTableByMonth(window.currentYear, window.currentMonthIndex);
+    refreshYearVisuals();
 
     alert("修改已保存到云端！");
   });
-
 
   // 👉 删除当前选中行
   deleteSelectedBtn.addEventListener("click", async () => {
@@ -336,18 +340,14 @@ function initAddRow() {
     const seqCell = selected.querySelector("td");
     const seqText = seqCell ? seqCell.textContent : "";
 
-    if (!confirm(`确定要删除第 ${seqText} 行记录吗？`)) {
-      return;
-    }
+    if (!confirm(`确定要删除第 ${seqText} 行记录吗？`)) return;
 
-    // 如果是新建未保存的行（data-new="true"）
     if (selected.dataset.new === "true") {
       selected.remove();
       renumberRows();
       return;
     }
 
-    // 已存在 Supabase 的记录
     const id = Number(selected.dataset.id);
     if (!id) {
       console.error("该行缺少 id，无法删除");
@@ -357,10 +357,7 @@ function initAddRow() {
     deleteSelectedBtn.disabled = true;
     deleteSelectedBtn.textContent = "删除中…";
 
-    const { error } = await supabaseClient
-      .from("climbing_logs")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabaseClient.from("climbing_logs").delete().eq("id", id);
 
     deleteSelectedBtn.disabled = false;
     deleteSelectedBtn.textContent = "🗑 删除当前选中行";
@@ -371,32 +368,16 @@ function initAddRow() {
       return;
     }
 
-    // 删除成功：重新加载数据 + 日历
     await loadLogsFromSupabase();
-
-    window.tableFilter.filterTableByMonth(
-      window.currentYear,
-      window.currentMonthIndex
-    );
-    
-    const calendarContainer = document.getElementById("calendar-2025");
-    if (calendarContainer) {
-      calendarContainer.innerHTML = "";
-      generateCalendar(2025, "calendar-2025");
-      initMonthTabs(2025);
-    }
+    window.tableFilter.filterTableByMonth(window.currentYear, window.currentMonthIndex);
+    refreshYearVisuals();
   });
 }
 
-
-// ===== 让点击表格行可以选中（高亮） =====
 function initRowSelection() {
   const tbody = document.getElementById("log-tbody");
   if (!tbody) return;
 
-  // 行点击行为：
-  // 单击某行 → 该行展开 + 高亮（不会因再次点击同一行而折叠）
-  // 单击另一行 → 前一行折叠，新行展开 + 高亮
   tbody.addEventListener("click", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
@@ -407,53 +388,45 @@ function initRowSelection() {
     });
 
     tr.classList.add("highlight-row");
-
     tr.classList.add("row-expanded");
   });
 }
 
-
-// ===== 删除后重新编号（序号列保持 1,2,3...） =====
 function renumberRows() {
   const tbody = document.getElementById("log-tbody");
   if (!tbody) return;
   const rows = tbody.querySelectorAll("tr");
   rows.forEach((tr, idx) => {
     const firstCell = tr.querySelector("td");
-    if (firstCell) {
-      firstCell.textContent = idx + 1;
-    }
+    if (firstCell) firstCell.textContent = idx + 1;
   });
 }
 
-
-
-// ===== 入口：页面加载完成后，先拉数据，再生成日历 & 初始化按钮 =====
+// ===== 入口 =====
 window.addEventListener("DOMContentLoaded", async () => {
-  
-  // ✅ 分享模式：交给 share.js 渲染，不要执行默认加载
   if (isShareMode()) return;
+
+  // 以页面 year 为准
+  window.currentYear = getPageYear();
 
   if (window.initAuthSession) {
     await window.initAuthSession();
   }
 
+  // 未登录：只读（隐藏编辑按钮）
+  setEditorButtonsVisible(!!window.currentUser);
+  window.addEventListener("auth-changed", (e) => setEditorButtonsVisible(!!e.detail.user));
+
   await loadLogsFromSupabase();
 
-  // ✅ 先监听月份切换事件（点 tab 会触发表格过滤）
   window.addEventListener("month-changed", (e) => {
     const { year, monthIndex } = e.detail;
     window.tableFilter.filterTableByMonth(year, monthIndex);
   });
 
-  generateCalendar(2025, "calendar-2025");
-  initMonthTabs(2025);
+  refreshYearVisuals();
   initAddRow();
   initRowSelection();
 
-  // ✅ 首次加载后，按当前选中月份过滤
-  window.tableFilter.filterTableByMonth(
-    window.currentYear,
-    window.currentMonthIndex
-  );
+  window.tableFilter.filterTableByMonth(window.currentYear, window.currentMonthIndex);
 });

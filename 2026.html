@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>攀岩记录（2026）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/github-heatmap.css" />
+</head>
+
+<body data-year="2026">
+  <div class="page">
+    <header>
+      <h1>Zhuomin 攀岩记录</h1>
+      <p>2026 年：全年 GitHub Calendar + 月历 + 明细表格</p>
+
+      <div style="margin-top: 10px; display:flex; gap:8px; flex-wrap: wrap; align-items:center;">
+        <a class="btn-secondary" href="./2026.html" style="text-decoration:none;">当前：2026</a>
+        <a class="btn-secondary" href="./2025.html" style="text-decoration:none;">去 2025</a>
+
+        <span style="flex:1"></span>
+
+        <span id="session-status" class="tag">未登录</span>
+        <a id="session-login-link" class="btn-secondary" href="./login.html?next=2026.html" style="text-decoration:none;">去登录</a>
+        <button id="session-logout-btn" class="btn-secondary" style="display:none;">退出</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 class="card-title"><span class="icon">🟩</span>全年记录（GitHub Calendar / 强度=总时长）</h2>
+      <div id="heatmap-2026" class="heatmap-root"></div>
+      <p class="note">提示：点击有记录的日期可跳转到表格对应行。</p>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><span class="icon">📅</span>攀岩日历（2026）</h2>
+
+      <div class="month-tabs" id="month-tabs-2026">
+        <button class="month-tab" data-month="0">1 月</button>
+        <button class="month-tab" data-month="1">2 月</button>
+        <button class="month-tab" data-month="2">3 月</button>
+        <button class="month-tab" data-month="3">4 月</button>
+        <button class="month-tab" data-month="4">5 月</button>
+        <button class="month-tab" data-month="5">6 月</button>
+        <button class="month-tab" data-month="6">7 月</button>
+        <button class="month-tab" data-month="7">8 月</button>
+        <button class="month-tab" data-month="8">9 月</button>
+        <button class="month-tab" data-month="9">10 月</button>
+        <button class="month-tab" data-month="10">11 月</button>
+        <button class="month-tab" data-month="11">12 月</button>
+      </div>
+
+      <div id="calendar-2026"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><span class="icon">🧗‍♀️</span>攀岩训练明细</h2>
+
+      <div style="margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button id="add-row-btn" class="btn-secondary">+ 新增一行记录</button>
+        <button id="save-new-rows-btn" class="btn-secondary">💾 保存新记录到云端</button>
+        <button id="save-edits-btn" class="btn-secondary">✅ 保存已修改行</button>
+        <button id="delete-selected-btn" class="btn-secondary">🗑 删除当前选中行</button>
+
+        <button id="generate-share-btn" class="btn-secondary" style="display:none;">🔗 生成分享链接</button>
+        <button id="copy-share-btn" class="btn-secondary" style="display:none;">📋 复制分享链接</button>
+      </div>
+
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;">序号</th>
+            <th style="width: 90px;">日期</th>
+            <th style="width: 80px;">时长</th>
+            <th>主要内容</th>
+            <th style="width: 150px;">达成情况</th>
+            <th style="width: 130px;">备注</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- 仅保留 ESM 入口，旧脚本全部移除 -->
+  <script type="module" src="assets/js/pages/year.page.js"></script>
+</body>
+</html>
