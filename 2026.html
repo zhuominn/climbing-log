@@ -5,18 +5,19 @@
   <title>攀岩记录（2026）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/primer-vars.css" />
   <link rel="stylesheet" href="assets/css/github-heatmap.css" />
 </head>
 
 <body data-year="2026">
   <div class="page">
     <header>
-      <h1>Zhuomin 攀岩记录</h1>
-      <p>2026 年：全年 GitHub Calendar + 月历 + 明细表格</p>
+      <h1>Zhuomin's Climbing Log</h1>
+      <p>Always climb with a beginner's mind.</p>
 
       <div style="margin-top: 10px; display:flex; gap:8px; flex-wrap: wrap; align-items:center;">
-        <a class="btn-secondary" href="./2026.html" style="text-decoration:none;">当前：2026</a>
-        <a class="btn-secondary" href="./2025.html" style="text-decoration:none;">去 2025</a>
+        <a class="btn-secondary" href="./2026.html" style="text-decoration:none;">Current: 2026</a>
+        <a class="btn-secondary" href="./2025.html" style="text-decoration:none;">Go to 2025</a>
 
         <span style="flex:1"></span>
 
@@ -27,9 +28,29 @@
     </header>
 
     <section class="card">
-      <h2 class="card-title"><span class="icon">🟩</span>全年记录（GitHub Calendar / 强度=总时长）</h2>
-      <div id="heatmap-2026" class="heatmap-root"></div>
-      <p class="note">提示：点击有记录的日期可跳转到表格对应行。</p>
+      <h2 class="card-title"><span class="icon">🟩</span>Climbs in 2026</h2>
+      <div id="heatmap-2026" class="heatmap-root">
+      <div class="gh-heatmap">
+        <!-- 顶部月份 -->
+        <div class="gh-months" id="gh-months-2026" aria-hidden="true"></div>
+
+        <!-- 左侧星期（GitHub 官方风格：只标 Mon/Wed/Fri） -->
+        <div class="gh-days" aria-hidden="true">
+          <div class="gh-day">Mon</div>
+          <div class="gh-day">Wed</div>
+          <div class="gh-day">Fri</div>
+        </div>
+
+        <!-- 主体格子：你的 JS 需要往这里塞 cell -->
+        <div class="heatmap-grid" id="gh-grid-2026"></div>
+      </div>
+
+      <!-- Tooltip（如果你现在的 JS 会创建 tooltip，也可以不写这个；写了更像 GitHub） -->
+      <div class="heatmap-tooltip" id="gh-tooltip-2026" style="display:none;"></div>
+    </div>
+
+    <p class="note">提示：点击有记录的日期可跳转到表格对应行。</p>
+
     </section>
 
     <section class="card">
