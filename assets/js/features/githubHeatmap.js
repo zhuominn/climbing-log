@@ -60,21 +60,27 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
 
     const header = document.createElement("div");
     header.className = "heatmap-header";
-    header.innerHTML = `<div class="heatmap-title">${year} Heatmap</div>
-      <div class="heatmap-legend" aria-hidden="true">
-        <span>Less</span>
-        <span class="heatmap-legend-cell"></span>
-        <span class="heatmap-legend-cell lvl-1"></span>
-        <span class="heatmap-legend-cell lvl-2"></span>
-        <span class="heatmap-legend-cell lvl-3"></span>
-        <span class="heatmap-legend-cell lvl-4"></span>
-        <span>More</span>
-      </div>`;
+    header.innerHTML = `<div class="heatmap-header-left">
+        <div class="heatmap-title">${year} Heatmap</div>
+      </div>
+      <div class="heatmap-year-switch" aria-label="Select year"></div>`;
     containerEl.appendChild(header);
 
     grid = document.createElement("div");
     grid.className = "heatmap-grid";
     containerEl.appendChild(grid);
+
+    const legend = document.createElement("div");
+    legend.className = "heatmap-legend";
+    legend.setAttribute("aria-hidden", "true");
+    legend.innerHTML = `<span>Less</span>
+      <span class="heatmap-legend-cell"></span>
+      <span class="heatmap-legend-cell lvl-1"></span>
+      <span class="heatmap-legend-cell lvl-2"></span>
+      <span class="heatmap-legend-cell lvl-3"></span>
+      <span class="heatmap-legend-cell lvl-4"></span>
+      <span>More</span>`;
+    containerEl.appendChild(legend);
 
     // tooltip ???????(?? innerHTML ???)
     tip = document.createElement("div");

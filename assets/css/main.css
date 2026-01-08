@@ -295,6 +295,23 @@ thead th:nth-child(3) {
   gap: 4px;
   font-size: 11px;
   margin-bottom: 12px;
+  flex: 1;
+}
+
+.calendar-body {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.calendar-month-label {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-sub);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
 .calendar-weekday {
@@ -332,10 +349,39 @@ thead th:nth-child(3) {
    ========================================================================== */
 .month-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 6px;
-  margin-bottom: 10px;
-  font-size: 12px;
+  font-size: 8px;
+  align-items: flex-end;
+  max-height: calc(6 * 32px + 5 * 6px);
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.month-tabs::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.calendar-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.calendar-layout .month-tabs {
+  margin-top: 2px;
+}
+
+.calendar-layout > div:first-child {
+  flex: 1;
+}
+
+.calendar-layout .month-tab {
+  width: 48px;
+  justify-content: center;
 }
 
 .month-tab {
@@ -346,6 +392,10 @@ thead th:nth-child(3) {
   cursor: pointer;
   color: var(--text-sub);
   white-space: nowrap;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .month-tab.active {

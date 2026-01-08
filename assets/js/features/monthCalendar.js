@@ -3,7 +3,9 @@ export function generateCalendar({ year, containerEl, climbDays, onClickDate }) 
 
   containerEl.innerHTML = "";
   const climbSet = new Set(Array.isArray(climbDays) ? climbDays : []);
-  const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
+  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
   for (let month = 0; month < 12; month++) {
     const monthPanel = document.createElement("div");
@@ -15,14 +17,12 @@ export function generateCalendar({ year, containerEl, climbDays, onClickDate }) 
 
     const title = document.createElement("div");
     title.className = "calendar-title";
-    title.textContent = `${year} 年 ${month + 1} 月`;
-
-    const desc = document.createElement("div");
-    desc.textContent = "圈出的日期表示攀岩日";
-
+    title.textContent = `${year}`;
     header.appendChild(title);
-    header.appendChild(desc);
     monthPanel.appendChild(header);
+
+    const body = document.createElement("div");
+    body.className = "calendar-body";
 
     const grid = document.createElement("div");
     grid.className = "calendar-grid";
@@ -35,8 +35,8 @@ export function generateCalendar({ year, containerEl, climbDays, onClickDate }) 
     });
 
     const firstDay = new Date(year, month, 1);
-    const jsWeekday = firstDay.getDay(); // 0=日
-    const offset = (jsWeekday + 6) % 7;  // 周一为第一列
+    const jsWeekday = firstDay.getDay(); // 0=Ã¦â€”Â¥
+    const offset = (jsWeekday + 6) % 7;  // Ã¥â€˜Â¨Ã¤Â¸â‚¬Ã¤Â¸ÂºÃ§Â¬Â¬Ã¤Â¸â‚¬Ã¥Ë†â€”
 
     for (let i = 0; i < offset; i++) {
       const empty = document.createElement("div");
@@ -71,7 +71,14 @@ export function generateCalendar({ year, containerEl, climbDays, onClickDate }) 
       grid.appendChild(dEl);
     }
 
-    monthPanel.appendChild(grid);
+    const label = document.createElement("div");
+    label.className = "calendar-month-label";
+    label.textContent = monthLabels[month];
+
+    body.appendChild(grid);
+    body.appendChild(label);
+
+    monthPanel.appendChild(body);
     containerEl.appendChild(monthPanel);
   }
 }

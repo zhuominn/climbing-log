@@ -5,6 +5,8 @@ import { generateCalendar, initMonthTabs } from "../features/monthCalendar.js";
 import { filterTableByMonth } from "../features/tableFilter.js";
 import { renderGithubHeatmap } from "../features/githubHeatmap.js";
 
+const AVAILABLE_YEARS = [2025, 2026];
+
 function getPageYear() {
   const y = Number(document.body?.dataset?.year);
   return Number.isFinite(y) ? y : 2025;
@@ -138,6 +140,31 @@ function initRowSelection(tbodyEl) {
   return activateRow;
 }
 
+function getYearList(switchEl) {
+  const raw = switchEl?.dataset?.years;
+  if (!raw) return AVAILABLE_YEARS.slice();
+  return raw
+    .split(",")
+    .map((v) => Number(v.trim()))
+    .filter((v) => Number.isFinite(v));
+}
+
+function renderYearSwitch(activeYear, heatmapEl) {
+  const switchEl = heatmapEl?.querySelector?.(".heatmap-year-switch");
+  if (!switchEl) return;
+
+  const years = getYearList(switchEl).sort((a, b) => b - a);
+  switchEl.innerHTML = "";
+
+  for (const y of years) {
+    const link = document.createElement("a");
+    link.className = `heatmap-year${y === activeYear ? " active" : ""}`;
+    link.href = `./${y}.html`;
+    link.textContent = String(y);
+    switchEl.appendChild(link);
+  }
+}
+
 async function main() {
   const year = getPageYear();
   const token = getShareTokenFromUrl();
@@ -229,6 +256,7 @@ async function main() {
 
     // if heatmap container exists, render
     if (heatmapEl) {
+      renderYearSwitch(year, heatmapEl);
       renderGithubHeatmap({
         year,
         containerEl: heatmapEl,

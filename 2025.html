@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <title>攀岩记录（2025）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/primer-vars.css" />
+  <link rel="stylesheet" href="assets/css/github-heatmap.css" />
 </head>
 
 <body data-year="2025">
@@ -14,9 +16,6 @@
       <p>Always climb with a beginner's mind.</p>
 
       <div style="margin-top: 10px; display:flex; gap:8px; flex-wrap: wrap; align-items:center;">
-        <a class="btn-secondary" href="./2026.html" style="text-decoration:none;">Go to 2026</a>
-        <a class="btn-secondary" href="./2025.html" style="text-decoration:none;">Current: 2025</a>
-
         <span style="flex:1"></span>
 
         <span id="session-status" class="tag">未登录</span>
@@ -26,24 +25,60 @@
     </header>
 
     <section class="card">
-      <h2 class="card-title"><span class="icon">📅</span>攀岩日历（2025）</h2>
+      <h2 class="card-title"><span class="icon">🟩</span>Climbs in 2025</h2>
+      <div id="heatmap-2025" class="heatmap-root">
+      <div class="heatmap-header">
+        <div class="heatmap-header-left">
+          <div class="heatmap-title">2025 Heatmap</div>
+        </div>
+        <div class="heatmap-year-switch" aria-label="Select year"></div>
+      </div>
+      <div class="gh-heatmap">
+        <div class="gh-months" id="gh-months-2025" aria-hidden="true"></div>
 
-      <div class="month-tabs" id="month-tabs-2025">
-        <button class="month-tab" data-month="0">1 月</button>
-        <button class="month-tab" data-month="1">2 月</button>
-        <button class="month-tab" data-month="2">3 月</button>
-        <button class="month-tab" data-month="3">4 月</button>
-        <button class="month-tab" data-month="4">5 月</button>
-        <button class="month-tab" data-month="5">6 月</button>
-        <button class="month-tab" data-month="6">7 月</button>
-        <button class="month-tab" data-month="7">8 月</button>
-        <button class="month-tab" data-month="8">9 月</button>
-        <button class="month-tab" data-month="9">10 月</button>
-        <button class="month-tab" data-month="10">11 月</button>
-        <button class="month-tab" data-month="11">12 月</button>
+        <div class="gh-days" aria-hidden="true">
+          <div class="gh-day">Mon</div>
+          <div class="gh-day">Wed</div>
+          <div class="gh-day">Fri</div>
+        </div>
+
+        <div class="heatmap-grid" id="gh-grid-2025"></div>
       </div>
 
-      <div id="calendar-2025"></div>
+      <div class="heatmap-legend" aria-hidden="true">
+        <span>Less</span>
+        <span class="heatmap-legend-cell"></span>
+        <span class="heatmap-legend-cell lvl-1"></span>
+        <span class="heatmap-legend-cell lvl-2"></span>
+        <span class="heatmap-legend-cell lvl-3"></span>
+        <span class="heatmap-legend-cell lvl-4"></span>
+        <span>More</span>
+      </div>
+
+      <div class="heatmap-tooltip" id="gh-tooltip-2025" style="display:none;"></div>
+    </div>
+
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><span class="icon">📅</span>攀岩日历（2025）</h2>
+      <div class="calendar-layout">
+        <div id="calendar-2025"></div>
+        <div class="month-tabs" id="month-tabs-2025">
+          <button class="month-tab" data-month="0">Jan</button>
+          <button class="month-tab" data-month="1">Feb</button>
+          <button class="month-tab" data-month="2">Mar</button>
+          <button class="month-tab" data-month="3">Apr</button>
+          <button class="month-tab" data-month="4">May</button>
+          <button class="month-tab" data-month="5">Jun</button>
+          <button class="month-tab" data-month="6">Jul</button>
+          <button class="month-tab" data-month="7">Aug</button>
+          <button class="month-tab" data-month="8">Sep</button>
+          <button class="month-tab" data-month="9">Oct</button>
+          <button class="month-tab" data-month="10">Nov</button>
+          <button class="month-tab" data-month="11">Dec</button>
+        </div>
+      </div>
     </section>
 
     <section class="card">
@@ -65,8 +100,8 @@
             <th style="width: 40px;">序号</th>
             <th style="width: 90px;">日期</th>
             <th style="width: 80px;">时长</th>
-            <th>主要内容</th>
-            <th style="width: 150px;">达成情况</th>
+            <th>训练内容</th>
+            <th style="width: 150px;">完成情况</th>
             <th style="width: 130px;">备注</th>
           </tr>
         </thead>
@@ -75,7 +110,7 @@
     </section>
   </div>
 
-  <!-- 仅保留 ESM 入口，旧脚本全部移除 -->
+  <!-- Keep ESM entry only; legacy scripts removed -->
   <script type="module" src="assets/js/pages/year.page.js"></script>
 </body>
 </html>
