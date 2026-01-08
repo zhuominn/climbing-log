@@ -60,7 +60,16 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
 
     const header = document.createElement("div");
     header.className = "heatmap-header";
-    header.innerHTML = `<div class="heatmap-title">${year} 年</div>`;
+    header.innerHTML = `<div class="heatmap-title">${year} Heatmap</div>
+      <div class="heatmap-legend" aria-hidden="true">
+        <span>Less</span>
+        <span class="heatmap-legend-cell"></span>
+        <span class="heatmap-legend-cell lvl-1"></span>
+        <span class="heatmap-legend-cell lvl-2"></span>
+        <span class="heatmap-legend-cell lvl-3"></span>
+        <span class="heatmap-legend-cell lvl-4"></span>
+        <span>More</span>
+      </div>`;
     containerEl.appendChild(header);
 
     grid = document.createElement("div");

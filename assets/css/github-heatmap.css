@@ -23,6 +23,29 @@
   color: var(--text-sub);
 }
 
+.heatmap-legend-cell {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-calendar-graph-day-bg);
+  border-radius: 2px;
+  outline: 1px solid var(--color-border-subtle);
+  outline-offset: -1px;
+}
+
+.heatmap-legend-cell.lvl-1 {
+  background-color: var(--color-calendar-graph-day-L1-bg);
+}
+.heatmap-legend-cell.lvl-2 {
+  background-color: var(--color-calendar-graph-day-L2-bg);
+}
+.heatmap-legend-cell.lvl-3 {
+  background-color: var(--color-calendar-graph-day-L3-bg);
+}
+.heatmap-legend-cell.lvl-4 {
+  background-color: var(--color-calendar-graph-day-L4-bg);
+}
+
 .heatmap-grid {
   --cell-size: 10px;
   display: grid;
