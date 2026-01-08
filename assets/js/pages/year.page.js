@@ -1,4 +1,4 @@
-import { initAuthSession, getCurrentUser, supabaseClient } from "../core/supabaseClient.js";
+﻿import { initAuthSession, getCurrentUser, supabaseClient } from "../core/supabaseClient.js";
 import { listByYear, listShared, insertLogs, upsertLogs, deleteLogById, createShareTokenLink } from "../data/logRepository.js";
 import { parseDurationToMinutes } from "../shared/durationUtils.js";
 import { generateCalendar, initMonthTabs } from "../features/monthCalendar.js";
@@ -113,12 +113,11 @@ function renderTable({ tbodyEl, rows, readOnly }) {
 function initRowSelection(tbodyEl) {
   let activeRow = null;
 
-  tbodyEl.addEventListener("click", (e) => {
-    const tr = e.target.closest("tr");
+  function activateRow(tr) {
     if (!tr) return;
 
     if (activeRow && activeRow !== tr) {
-      // edited-row 强制展开不折叠
+      // Keep edited rows expanded when switching.
       if (!activeRow.classList.contains("edited-row")) {
         activeRow.classList.remove("row-expanded");
       }
@@ -128,7 +127,15 @@ function initRowSelection(tbodyEl) {
     tr.classList.add("highlight-row");
     tr.classList.add("row-expanded");
     activeRow = tr;
+  }
+
+  tbodyEl.addEventListener("click", (e) => {
+    const tr = e.target.closest("tr");
+    if (!tr) return;
+    activateRow(tr);
   });
+
+  return activateRow;
 }
 
 async function main() {
@@ -186,6 +193,8 @@ async function main() {
     alert("已复制分享链接！");
   });
 
+  let activateRow = () => {};
+
   function focusDate(dateKey) {
     // switch tab month
     const monthIndex = Number(dateKey.slice(5, 7)) - 1;
@@ -195,9 +204,7 @@ async function main() {
     const row = document.getElementById(`row-${dateKey}`);
     if (row) {
       row.scrollIntoView({ behavior: "smooth", block: "center" });
-      tbodyEl.querySelectorAll("tr").forEach((r) => r.classList.remove("highlight-row"));
-      row.classList.add("highlight-row");
-      row.classList.add("row-expanded");
+      activateRow(row);
     }
   }
 
@@ -211,7 +218,7 @@ async function main() {
 
     renderTable({ tbodyEl, rows, readOnly: isShareMode || !getCurrentUser() });
 
-    generateCalendar({ year, containerEl: calendarEl, climbDays });
+    generateCalendar({ year, containerEl: calendarEl, climbDays, onClickDate: focusDate });
 
     initMonthTabs({
       year,
@@ -226,7 +233,6 @@ async function main() {
         year,
         containerEl: heatmapEl,
         minutesByDay,
-        onClickDate: focusDate,
       });
     }
   }
@@ -379,7 +385,7 @@ async function main() {
     alert("已退出登录");
   });
 
-  initRowSelection(tbodyEl);
+  activateRow = initRowSelection(tbodyEl);
   await refresh();
 }
 

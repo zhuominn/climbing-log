@@ -1,4 +1,4 @@
-function toDateKey(d) {
+﻿function toDateKey(d) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
@@ -40,12 +40,12 @@ function parsePx(value, fallback) {
 export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDate }) {
   if (!containerEl) return;
 
-  // scaffold（GitHub 风格布局）优先：.gh-heatmap 里应包含 .gh-months / .gh-days / .heatmap-grid
+  // scaffold(GitHub ????)??:.gh-heatmap ???? .gh-months / .gh-days / .heatmap-grid
   const scaffold = containerEl.querySelector(".gh-heatmap");
   const monthsEl = scaffold?.querySelector(".gh-months") || null;
   let grid = scaffold?.querySelector(".heatmap-grid") || null;
 
-  // tooltip：复用或创建
+  // tooltip:?????
   let tip = containerEl.querySelector(".heatmap-tooltip");
   if (!tip) {
     tip = document.createElement("div");
@@ -54,7 +54,7 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
     containerEl.appendChild(tip);
   }
 
-  // 如果没有 scaffold 的 grid，就用“简化版布局”（避免你之前的无限递归）
+  // ???? scaffold ? grid,??�?????�(??????????)
   if (!grid) {
     containerEl.innerHTML = "";
 
@@ -76,24 +76,24 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
     grid.className = "heatmap-grid";
     containerEl.appendChild(grid);
 
-    // tooltip 需要重新挂回去（因为 innerHTML 清空过）
+    // tooltip ???????(?? innerHTML ???)
     tip = document.createElement("div");
     tip.className = "heatmap-tooltip";
     tip.style.display = "none";
     containerEl.appendChild(tip);
   }
 
-  // 清空格子与月份标签
+  // ?????????
   grid.innerHTML = "";
   if (monthsEl) monthsEl.innerHTML = "";
 
-  // 从 CSS 变量读取 cell/gap（匹配 .gh-heatmap 的 --cell/--gap；不存在就 fallback）
+  // ? CSS ???? cell/gap(?? .gh-heatmap ? --cell/--gap;???? fallback)
   const ghRoot = scaffold || containerEl;
   const cs = getComputedStyle(ghRoot);
   const cellPx = parsePx(cs.getPropertyValue("--cell"), 10);
   const gapPx = parsePx(cs.getPropertyValue("--gap"), 2);
 
-  // 让 heatmap-grid 对齐 cell/gap
+  // ? heatmap-grid ?? cell/gap
   grid.style.setProperty("--cell-size", `${cellPx}px`);
   grid.style.gap = `${gapPx}px`;
 
@@ -108,7 +108,7 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
 
   grid.style.gridTemplateColumns = `repeat(${weeks}, var(--cell-size))`;
 
-  // 月份标签：绝对定位到对应 week 列
+  // ????:??????? week ?
   if (monthsEl) {
     monthsEl.style.width = `${weeks * cellPx + (weeks - 1) * gapPx}px`;
 
@@ -129,7 +129,7 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
       const el = document.createElement("div");
       el.className = "gh-month";
       el.style.left = `${left}px`;
-      el.textContent = monthNames[m]; // ← 改为英文月份缩写
+      el.textContent = monthNames[m]; // ? ????????
       monthsEl.appendChild(el);
     }
   }
@@ -167,12 +167,12 @@ export function renderGithubHeatmap({ year, containerEl, minutesByDay, onClickDa
 
     if (inYear) {
       cell.addEventListener("mouseenter", () => {
-        showTooltip(minutes > 0 ? `${dateKey} · ${minutes} 分钟` : `${dateKey} · 0`, cell);
+        showTooltip(minutes > 0 ? `${dateKey} � ${minutes} ??` : `${dateKey} � 0`, cell);
       });
       cell.addEventListener("mouseleave", hideTooltip);
-      cell.addEventListener("click", () => {
-        if (minutes > 0) onClickDate?.(dateKey);
-      });
+      if (minutes > 0 && typeof onClickDate === "function") {
+        cell.addEventListener("click", () => onClickDate(dateKey));
+      }
     }
 
     grid.appendChild(cell);

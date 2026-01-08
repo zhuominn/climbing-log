@@ -1,4 +1,4 @@
-export function generateCalendar({ year, containerEl, climbDays }) {
+export function generateCalendar({ year, containerEl, climbDays, onClickDate }) {
   if (!containerEl) return;
 
   containerEl.innerHTML = "";
@@ -56,7 +56,12 @@ export function generateCalendar({ year, containerEl, climbDays }) {
         "-" +
         String(day).padStart(2, "0");
 
-      if (climbSet.has(dateStr)) dEl.classList.add("climb-day");
+      const isClimbDay = climbSet.has(dateStr);
+      if (isClimbDay) dEl.classList.add("climb-day");
+      if (isClimbDay) {
+        dEl.dataset.date = dateStr;
+        dEl.addEventListener("click", () => onClickDate?.(dateStr));
+      }
 
       const span = document.createElement("span");
       span.className = "day-number";
