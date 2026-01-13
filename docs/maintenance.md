@@ -181,3 +181,27 @@
   - `assets/js/shared/durationUtils.js`
   - `assets/css/main.css`
   - `assets/css/github-heatmap.css`
+
+### 2026-01-08
+
+- **Change**：
+  - 2025/2026 页面补齐 heatmap 区块与样式，新增年份切换入口并调整 legend/header 布局；统一 2025 标题文案。
+  - 月历 UI 重排：月份标签改为英文缩写，月份 tab 改为右侧竖排滚动，新增纵向月份标识与 `calendar-layout` 布局样式。
+  - 月历与表格联动：可点击有记录的日期定位并高亮表格行；行选中逻辑抽成 `activateRow` 供程序调用。
+  - heatmap 交互细化：仅对有记录日期绑定 click，网格/legend 间距与样式调整。
+- **Why**：
+  - 统一 2025/2026 页面布局与 heatmap 体验，年份切换更直观。
+  - 减少查找记录的操作成本，右侧竖排 tab 更贴合布局。
+  - 避免无数据日期误触，提升 heatmap 可读性与接近 GitHub 风格。
+- **How to test**：
+  - 1) 打开 `2025.html`/`2026.html`，确认 heatmap header/legend/年份切换显示正常，2025 页面也能渲染 heatmap。
+  - 2) 在月历点击有记录日期，表格滚动到对应行并高亮/展开。
+  - 3) 月份 tab 竖排可滚动，月份英文缩写与纵向月份标识显示正常。
+- **Files**：
+  - `2025.html`
+  - `2026.html`
+  - `assets/js/pages/year.page.js`
+  - `assets/js/features/monthCalendar.js`
+  - `assets/js/features/githubHeatmap.js`
+  - `assets/css/main.css`
+  - `assets/css/github-heatmap.css`
