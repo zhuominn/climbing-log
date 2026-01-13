@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>登录 - 攀岩日志</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>登录</h1>
+      <p>登录后默认进入 2026 页面，可新增/编辑/删除记录。</p>
+    </header>
+
+    <section class="card" id="auth-card">
+      <div class="auth-row">
+        <span id="auth-status">未登录</span>
+      </div>
+      <div class="auth-row">
+        <input type="email" id="auth-email" placeholder="登录邮箱" autocomplete="email" />
+        <input type="password" id="auth-password" placeholder="密码" autocomplete="current-password" />
+        <button id="auth-login-btn" class="btn-secondary">登录</button>
+        <button id="auth-logout-btn" class="btn-secondary" style="display:none;">退出登录</button>
+      </div>
+
+      <p class="note">
+        提示：登录后会自动跳转到 next 指定页面；如果没有 next，默认跳转到 2026。
+      </p>
+
+      <div style="margin-top: 8px; display:flex; gap:8px; flex-wrap: wrap;">
+        <a class="btn-secondary" href="./2026.html" style="text-decoration:none;">直接进入 2026（只读）</a>
+        <a class="btn-secondary" href="./2025.html" style="text-decoration:none;">进入 2025（只读）</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- 仅保留 ESM 入口 -->
+  <script type="module" src="assets/js/pages/login.page.js"></script>
+</body>
+</html>

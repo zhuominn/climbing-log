@@ -1,5 +1,20 @@
 // ===== 登录/登出 UI 和逻辑 =====
 
+function getSafeNextUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const next = (params.get("next") || "").trim();
+
+  // 允许：2026.html / 2025.html / 2026.html?x=y 等（同站点相对路径）
+  // 拒绝：带协议、双斜杠等
+  if (!next) return "./2026.html";
+  if (next.includes("://") || next.startsWith("//")) return "./2026.html";
+
+  // 规范化：只允许相对路径（GitHub Pages 友好）
+  if (next.startsWith("./")) return next;
+  if (next.startsWith("/")) return "." + next; // 仍相对当前站点根
+  return "./" + next;
+}
+
 function updateAuthUI(user) {
   const statusEl = document.getElementById("auth-status");
   const emailInput = document.getElementById("auth-email");
@@ -47,7 +62,7 @@ function initAuthUI() {
     loginBtn.disabled = true;
     loginBtn.textContent = "登录中…";
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
@@ -61,8 +76,8 @@ function initAuthUI() {
       return;
     }
 
-    // 登录成功后，currentUser 会通过 onAuthStateChange 更新
-    alert("登录成功！");
+    // 登录成功：跳转到 next 或默认 2026
+    window.location.replace(getSafeNextUrl());
   });
 
   // 退出登录
@@ -83,6 +98,9 @@ function initAuthUI() {
 }
 
 // 页面加载时初始化
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  if (window.initAuthSession) {
+    await window.initAuthSession();
+  }
   initAuthUI();
 });

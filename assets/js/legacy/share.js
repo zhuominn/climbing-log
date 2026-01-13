@@ -11,8 +11,12 @@ function getShareTokenFromUrl() {
   return params.get("share");
 }
 
+function getPageYear() {
+  const y = Number(document.body?.dataset?.year);
+  return Number.isFinite(y) ? y : (window.currentYear || 2025);
+}
+
 function setReadOnlyUI(isReadOnly) {
-  // 只读模式：隐藏编辑按钮（你已有的按钮 ID）
   const editorButtons = [
     "add-row-btn",
     "save-new-rows-btn",
@@ -25,12 +29,10 @@ function setReadOnlyUI(isReadOnly) {
     btn.style.display = isReadOnly ? "none" : "inline-flex";
   });
 
-  // 只读模式：表格不可编辑（contentEditable 关掉）
   const tbody = document.getElementById("log-tbody");
-  if (tbody) {
-    tbody.querySelectorAll("td").forEach((td, idx) => {
-      // 第 1 列序号不管，其他列只要不是只读模式就保持可编辑（你的逻辑会重新渲染）
-      if (isReadOnly) td.contentEditable = "false";
+  if (tbody && isReadOnly) {
+    tbody.querySelectorAll("td").forEach((td) => {
+      td.contentEditable = "false";
     });
   }
 }
@@ -39,8 +41,10 @@ async function loadSharedLogs(token) {
   const tbody = document.getElementById("log-tbody");
   if (!tbody) return;
 
-  const { data, error } = await supabaseClient
-    .rpc("get_shared_logs", { p_token: token });
+  const year = getPageYear();
+  window.currentYear = year;
+
+  const { data, error } = await supabaseClient.rpc("get_shared_logs", { p_token: token });
 
   if (error) {
     console.error("加载分享数据失败：", error);
@@ -48,13 +52,17 @@ async function loadSharedLogs(token) {
     return;
   }
 
-  // 用你当前的渲染逻辑来填表：这里做一个最小实现（只读）
+  const rows = (data || []).filter((r) => typeof r.date === "string" && r.date.startsWith(`${year}-`));
+
   tbody.innerHTML = "";
   climbDays = [];
 
-  data.forEach((row, index) => {
+  // heatmap minutes
+  window.minutesByDay = {};
+  rows.forEach((row, index) => {
     const tr = document.createElement("tr");
-    tr.id = "row-" + row.date;
+    tr.id = row.date ? "row-" + row.date : "";
+    tr.dataset.date = row.date || "";
 
     const tdSeq = document.createElement("td");
     tdSeq.textContent = index + 1;
@@ -71,20 +79,34 @@ async function loadSharedLogs(token) {
     cols.forEach((v) => {
       const td = document.createElement("td");
       td.textContent = v ?? "";
-      td.contentEditable = "false"; // 分享模式只读
+      td.contentEditable = "false";
       tr.appendChild(td);
     });
 
     tbody.appendChild(tr);
+
     if (row.date) climbDays.push(row.date);
+
+    const minutes = window.durationUtils?.parseDurationToMinutes?.(row.duration);
+    if (typeof minutes === "number" && Number.isFinite(minutes) && minutes > 0) {
+      window.minutesByDay[row.date] = minutes;
+    }
   });
 
-  // 刷新日历（你已有的函数在 calendar.js）
-  const calendarContainer = document.getElementById("calendar-2025");
+  // 月历
+  const calId = "calendar-" + year;
+  const calendarContainer = document.getElementById(calId);
   if (calendarContainer) {
     calendarContainer.innerHTML = "";
-    generateCalendar(2025, "calendar-2025");
-    initMonthTabs(2025);
+    generateCalendar(year, calId);
+    initMonthTabs(year);
+  }
+
+  // heatmap（如果页面有）
+  const heatId = "heatmap-" + year;
+  const heatContainer = document.getElementById(heatId);
+  if (heatContainer && typeof window.generateGithubHeatmap === "function") {
+    window.generateGithubHeatmap(year, heatId, window.minutesByDay || {});
   }
 }
 
@@ -96,12 +118,10 @@ async function initShareButtons() {
 
   let currentShareLink = "";
 
-  // 登录状态变化时：只有登录用户才显示“生成分享链接”
   window.addEventListener("auth-changed", (e) => {
     const user = e.detail.user;
     const show = !!user;
     genBtn.style.display = show ? "inline-flex" : "none";
-    // copyBtn 只有生成后才显示
     if (!show) {
       copyBtn.style.display = "none";
       currentShareLink = "";
@@ -121,7 +141,7 @@ async function initShareButtons() {
     const { error } = await supabaseClient.from("share_links").insert({
       token,
       owner_user_id: window.currentUser.id,
-      expires_at: null, // 你也可以后续做“7天过期”
+      expires_at: null,
     });
 
     genBtn.disabled = false;
@@ -146,31 +166,24 @@ async function initShareButtons() {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+  const year = getPageYear();
+  window.currentYear = year;
+
   const token = getShareTokenFromUrl();
   if (token) {
-    // 进入分享只读模式
     setReadOnlyUI(true);
-
-    // 加载分享数据（不需要登录）
     await loadSharedLogs(token);
 
-    // 隐藏登录卡片（可选）
     const authCard = document.getElementById("auth-card");
     if (authCard) authCard.style.display = "none";
   } else {
-    // 非分享模式：初始化分享按钮（只对登录用户显示）
     initShareButtons();
   }
-
 
   window.addEventListener("month-changed", (e) => {
     const { year, monthIndex } = e.detail;
     window.tableFilter.filterTableByMonth(year, monthIndex);
   });
-  // ✅ 首次加载后，按当前选中月份过滤
-  window.tableFilter.filterTableByMonth(
-    window.currentYear,
-    window.currentMonthIndex
-  );
 
+  window.tableFilter.filterTableByMonth(window.currentYear, window.currentMonthIndex);
 });

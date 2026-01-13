@@ -1,9 +1,10 @@
-// ===== 日历：生成 2025 年月历 & 月份 tab 切换 =====
+// ===== 日历：生成全年月历 & 月份 tab 切换 =====
 
 function generateCalendar(year, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  const climbSet = new Set(Array.isArray(climbDays) ? climbDays : []);
   const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
 
   for (let month = 0; month < 12; month++) {
@@ -28,7 +29,6 @@ function generateCalendar(year, containerId) {
     const grid = document.createElement("div");
     grid.className = "calendar-grid";
 
-    // 星期标题
     weekdays.forEach((w) => {
       const wEl = document.createElement("div");
       wEl.className = "calendar-weekday";
@@ -36,19 +36,16 @@ function generateCalendar(year, containerId) {
       grid.appendChild(wEl);
     });
 
-    // 这个月第一天
     const firstDay = new Date(year, month, 1);
     const jsWeekday = firstDay.getDay(); // 0-6, 周日-周六
     const offset = (jsWeekday + 6) % 7;  // 以周一为第一列
 
-    // 前置空白
     for (let i = 0; i < offset; i++) {
       const empty = document.createElement("div");
       empty.className = "day day-empty";
       grid.appendChild(empty);
     }
 
-    // 这个月总天数
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -62,8 +59,7 @@ function generateCalendar(year, containerId) {
         "-" +
         String(day).padStart(2, "0");
 
-      // 攀岩日打圈
-      if (climbDays.includes(dateStr)) {
+      if (climbSet.has(dateStr)) {
         dEl.classList.add("climb-day");
       }
 
@@ -72,21 +68,12 @@ function generateCalendar(year, containerId) {
       span.textContent = day;
       dEl.appendChild(span);
 
-      // 点击：如果是攀岩日 → 滚到表格对应行并高亮
       dEl.addEventListener("click", () => {
-        if (climbDays.includes(dateStr)) {
+        if (climbSet.has(dateStr)) {
           const row = document.getElementById("row-" + dateStr);
           if (row) {
-            row.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-
-            // 取消其他行高亮
-            document
-              .querySelectorAll("tr")
-              .forEach((el) => el.classList.remove("highlight-row"));
-
+            row.scrollIntoView({ behavior: "smooth", block: "center" });
+            document.querySelectorAll("#log-tbody tr").forEach((el) => el.classList.remove("highlight-row"));
             row.classList.add("highlight-row");
           }
         }
@@ -108,28 +95,22 @@ function initMonthTabs(year) {
   const tabs = tabsContainer.querySelectorAll(".month-tab");
   const panels = calendarContainer.querySelectorAll(".month-panel");
 
+  const storageKey = `climbing_currentMonthIndex_${year}`;
+
   function setActiveMonth(monthIndex) {
-    // 更新全局状态
     window.currentMonthIndex = monthIndex;
-    localStorage.setItem("climbing_currentMonthIndex", String(monthIndex));
+    localStorage.setItem(storageKey, String(monthIndex));
 
     tabs.forEach((tab) => {
-      tab.classList.toggle(
-        "active",
-        Number(tab.dataset.month) === monthIndex
-      );
+      tab.classList.toggle("active", Number(tab.dataset.month) === monthIndex);
     });
     panels.forEach((panel) => {
-      panel.classList.toggle(
-        "active",
-        Number(panel.dataset.month) === monthIndex
-      );
+      panel.classList.toggle("active", Number(panel.dataset.month) === monthIndex);
     });
 
-    // 通知其他模块（比如表格）当前月份变了
     window.dispatchEvent(
       new CustomEvent("month-changed", {
-        detail: { year, monthIndex }, // monthIndex: 0-11
+        detail: { year, monthIndex },
       })
     );
   }
@@ -141,8 +122,10 @@ function initMonthTabs(year) {
     });
   });
 
-  const saved = localStorage.getItem("climbing_currentMonthIndex");
-  const defaultMonthIndex = saved !== null ? Number(saved) : 10; // 没存过就默认 11 月
-  setActiveMonth(defaultMonthIndex);
+  const saved = localStorage.getItem(storageKey);
+  const now = new Date();
+  const defaultMonthIndex =
+    saved !== null ? Number(saved) : (now.getFullYear() === year ? now.getMonth() : 0);
 
+  setActiveMonth(defaultMonthIndex);
 }
