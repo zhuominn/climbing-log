@@ -1,4 +1,4 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/esm/supabase.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/+esm";
 
 // NOTE: 这里沿用你现有 key；如需更安全可改为运行时注入/环境变量方案
 const supabaseUrl = "https://xcfendynbsrmpgalpefk.supabase.co";
