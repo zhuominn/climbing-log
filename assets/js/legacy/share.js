@@ -72,7 +72,7 @@ async function loadSharedLogs(token) {
       row.date,
       row.duration || "—",
       row.content || "",
-      row.result || "",
+      row.gym || "",
       row.note || "",
     ];
 

@@ -104,8 +104,8 @@ function renderTable({ tbodyEl, rows, readOnly }) {
 
     addEditableCellToRow(tr, row.date, { dateCell: true, readOnly });
     addEditableCellToRow(tr, row.duration || "—", { readOnly });
+    addEditableCellToRow(tr, row.gym || "", { readOnly });
     addEditableCellToRow(tr, row.content || "", { readOnly });
-    addEditableCellToRow(tr, row.result || "", { readOnly });
     addEditableCellToRow(tr, row.note || "", { readOnly });
 
     tbodyEl.appendChild(tr);
@@ -327,12 +327,12 @@ async function main() {
       const tds = tr.querySelectorAll("td");
       const date = readLogCellText(tds[1]).trim();
       const duration = readLogCellText(tds[2]).trim();
-      const content = readLogCellText(tds[3]).trim();
-      const result = readLogCellText(tds[4]).trim();
+      const gym = readLogCellText(tds[3]).trim();
+      const content = readLogCellText(tds[4]).trim();
       const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("日期格式需为 YYYY-MM-DD");
-      return { date, duration, content, result, note, user_id: getCurrentUser().id };
+      return { date, duration, content, gym, note, user_id: getCurrentUser().id };
     });
 
     try {
@@ -358,13 +358,13 @@ async function main() {
       const tds = tr.querySelectorAll("td");
       const date = readLogCellText(tds[1]).trim();
       const duration = readLogCellText(tds[2]).trim();
-      const content = readLogCellText(tds[3]).trim();
-      const result = readLogCellText(tds[4]).trim();
+      const gym = readLogCellText(tds[3]).trim();
+      const content = readLogCellText(tds[4]).trim();
       const note = readLogCellText(tds[5]).trim();
 
       if (!id) throw new Error("缺少 id");
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("日期格式需为 YYYY-MM-DD");
-      return { id, date, duration, content, result, note, user_id: getCurrentUser().id };
+      return { id, date, duration, content, gym, note, user_id: getCurrentUser().id };
     });
 
     try {
