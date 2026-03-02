@@ -88,7 +88,7 @@ async function loadLogsFromSupabase() {
     addEditableCellToRow(tr, row.date, { dateCell: true });
     addEditableCellToRow(tr, row.duration || "—");
     addEditableCellToRow(tr, row.content || "");
-    addEditableCellToRow(tr, row.result || "");
+    addEditableCellToRow(tr, row.gym || "");
     addEditableCellToRow(tr, row.note || "");
 
     tbody.appendChild(tr);
@@ -223,7 +223,7 @@ function initAddRow() {
       const dateStr = readLogCellText(tds[1]).trim();
       const duration = readLogCellText(tds[2]).trim();
       const content = readLogCellText(tds[3]).trim();
-      const result = readLogCellText(tds[4]).trim();
+      const gym = readLogCellText(tds[4]).trim();
       const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
@@ -235,7 +235,7 @@ function initAddRow() {
         date: dateStr,
         duration,
         content,
-        result,
+        gym,
         note,
         user_id: window.currentUser.id,
       });
@@ -284,7 +284,7 @@ function initAddRow() {
       const dateStr = readLogCellText(tds[1]).trim();
       const duration = readLogCellText(tds[2]).trim();
       const content = readLogCellText(tds[3]).trim();
-      const result = readLogCellText(tds[4]).trim();
+      const gym = readLogCellText(tds[4]).trim();
       const note = readLogCellText(tds[5]).trim();
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
@@ -297,7 +297,7 @@ function initAddRow() {
         date: dateStr,
         duration,
         content,
-        result,
+        gym,
         note,
         user_id: window.currentUser.id,
       });
